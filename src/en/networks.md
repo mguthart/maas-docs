@@ -1,9 +1,7 @@
 Networks
 ========
 
-> **note**
->
-> This feature is available in MAAS versions 1.5 and above, starting with revision 1961. If you're writing a client application, you can check if MAAS supports this feature via the web API; see the documentation for the `networks-management` capability here\<cap-networks-management\>.
+!!!**Note:** This feature is available in MAAS versions 1.5 and above, starting with revision 1961. If you're writing a client application, you can check if MAAS supports this feature via the web API; see the documentation for the `networks-management` capability here\<cap-networks-management\>.
 
 A MAAS cluster controller can manage nodes on one or more networks. The cluster controller must have direct interfaces connected to these networks, and each node must be managed through one of them.
 
@@ -17,16 +15,17 @@ But nodes may also be connected to additional networks, for your production work
 
 To avoid confusion, MAAS imposes three rules on the networks you define. Apart from these, MAAS places no restrictions on the number or nature of your networks, or on which nodes are connected to which networks. The rules are:
 
-1.  Each node must be on a network that is directly connected to an interface on the node's cluster controller. It is recommended that you let the cluster controller manage DHCP and DNS on this network. See cluster-configuration for the details.
-2.  All networks must have different, non-overlapping IP ranges. Any possible IP address in the MAAS should belong to only one network.
-3.  If you use virtual networks, each must have a different VLAN tag in the range 0x001 to 0xffe (1 to 4094) inclusive. Non-virtual networks have no tag, and you can have as many of these as you want.
+1.  Each node must be on a network that is directly connected to an interface on the node's cluster controller. It     is recommended that you let the cluster controller manage DHCP and DNS on this network. See
+    cluster-configuration for the details.
+1.  All networks must have different, non-overlapping IP ranges. Any possible IP address in the MAAS should belong     to only one network.
+1.  If you use virtual networks, each must have a different VLAN tag in the range 0x001 to 0xffe (1 to 4094)  
+    inclusive. Non-virtual networks have no tag, and you can have as many of these as you want.
 
 Networks are defined globally, not within clusters. They can span clusters, or be confined to clusters, or connect selected nodes from different clusters, as suits your needs. For now, if you want to make use of these placement constraints when allocating nodes, you need to define your networks explicitly. Future versions of MAAS may detect some of your networks and define them automatically.
 
 The networks on which MAAS manages nodes are special, however: they cannot connect to different clusters. These are the networks that connect to interfaces on the cluster controller. You may define these networks, but you don't have to. You need a cluster interface for MAAS to manage nodes (or even just serve DHCP) on the network to which it is connected. Networks, on the other hand, only need to be defined in order to enable network placement constraints when allocating nodes, as in the examples above.
 
-Defining networks
------------------
+## Defining networks
 
 There are two ways to define networks: through the web user interface, or through the API. The command-line interface acts a front-end for the API.
 
@@ -46,8 +45,7 @@ The VLAN tag is a number between 1 and 4094 inclusive, as dictated by the underl
 
 You can also define a network through the region-controller API \<region-controller-api\>. The values are the same as for the web UI. To do this, `POST` your network definition to the *"networks"* endpoint.
 
-Connecting nodes to networks
-----------------------------
+## Connecting nodes to networks
 
 In order for network placement constraints to take effect, you must also tell MAAS which nodes are connected to each network.
 
@@ -67,13 +65,13 @@ Connecting a node to a network does not affect any other connections between the
 
 Future versions of MAAS may detect and register some of the networks and their connections to nodes automatically.
 
-Placement constraints
----------------------
+## Placement constraints
+
 
 When you allocate a node through the API, or search for nodes in the web UI, you can specify two kinds of constraints for the node's network placement:
 
 1.  `networks` specifies that the node you want must be connected to *all* of the given networks.
-2.  `not_networks` says that a node must *not* be connected to *any* of the given networks.
+1.  `not_networks` says that a node must *not* be connected to *any* of the given networks.
 
 Constraints can identify a network in any of several ways. You may combine these freely. Each is a way of referring to a specific network, just expressed in different ways.
 
