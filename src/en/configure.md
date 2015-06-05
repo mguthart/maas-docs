@@ -67,9 +67,7 @@ Where the string contains one of the valid, available distro series (e.g. "trust
 Altering the Preseed file
 -------------------------
 
-> **warning**
-
-> Do not try to alter the preseed files if you don't have a good understanding of what you are doing. Altering the installed version of Ubuntu can prevent MAAS from working as intended, and may have security and stability consequences.
+!!!**warning** Do not try to alter the preseed files if you don't have a good understanding of what you are doing. Altering the installed version of Ubuntu can prevent MAAS from working as intended, and may have security and stability consequences.
 
 When MAAS commissions a node it installs a version of Ubuntu. The installation is performed using a 'preseed' file, which is effectively a list of answers to the questions you would get were you to run the installer manually. The preseed file used by MAAS is carefully made so that the target node can be brought up and do all the jobs expected of it. However, in exceptional circumstances, you may wish to alter the pressed file to work around some issue. There are actually two preseed files, stored here:
 
@@ -85,10 +83,17 @@ For the more usual sorts of things you may wish to change, you should edit the p
     d-i     clock-setup/ntp boolean true
     d-i     clock-setup/ntp-server  string ntp.ubuntu.com
 
-Having consistent clocks is very important to the working of your MAAS system overall. If your nodes however cannot freely access the Internet, the supplied NTP server is not going to be very useful, and you may find it better to run an ntp service on the MAAS controller and change the ntp.ubuntu.com in the last line for a more appropriate server.
+Having consistent clocks is very important to the working of your MAAS system
+overall. If your nodes however cannot freely access the Internet, the supplied
+NTP server is not going to be very useful, and you may find it better to run
+an ntp service on the MAAS controller and change the ntp.ubuntu.com
+in the last line for a more appropriate server.
 
-One thing you may wish to alter in the preseed file is the disk partitioning. This is a simple recipe that creates a swap partition and uses the rest of the disk for one large root filesystem:
+One thing you may wish to alter in the preseed file is the disk partitioning.
+This is a simple recipe that creates a swap partition and uses the rest of the
+disk for one large root filesystem:
 
+```
     partman-auto/text/atomic_scheme ::
 
     500 10000 1000000 ext3
@@ -103,11 +108,18 @@ One thing you may wish to alter in the preseed file is the disk partitioning. Th
     64 512 300% linux-swap
         method{ swap }
         format{ } .
+```
 
-Here the root partition must be at least 500 mb, and has effectively no maximum size. The swap partition ranges from 64 MB to 3 times the system's ram. Adding \$bootable{ } to make the partition bootable, and \$primary{ } marks it as the primary partition. The other specifiers used are:
+Here the root partition must be at least 500 mb, and has effectively no maximum
+size. The swap partition ranges from 64 MB to 3 times the system's ram. Adding
+\$bootable{ } to make the partition bootable, and \$primary{ } marks it as the
+primary partition. The other specifiers used are:
 
 *method{ format }*  
-Used to make the partition be formatted. For swap partitions, change it to "swap". To create a new partition but do not format it, change "format" to "keep" (such a partition can be used to reserve for future use some disk space).
+Used to make the partition be formatted. For swap partitions, change it to
+"swap". To create a new partition but do not format it, change "format" to
+"keep" (such a partition can be used to reserve for future use some disk
+space).
 
 *format{ }*  
 Also needed to make the partition be formatted.
