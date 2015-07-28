@@ -145,7 +145,7 @@ class Page:
             ('src="media/', 'src="../../media/')
         ]
         for pair in replace:
-            print pair[0], pair[1]
+            
             self.output = re.sub(pair[0], pair[1], self.output)
         self.parser.reset()
 

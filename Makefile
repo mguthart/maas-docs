@@ -1,7 +1,7 @@
 
 build:
 	tools/mdbuild.py
-	cp -R media _build
+
 serve:
 	python -m SimpleHTTPServer
 
@@ -12,4 +12,7 @@ sysdeps:
 multi:
 	tools/make_versions.sh
 
-.PHONY: build serve sysdeps multi 
+clean:
+	if [ -d "_build" ];then rm -rf _build; fi
+
+.PHONY: build serve sysdeps multi clean
