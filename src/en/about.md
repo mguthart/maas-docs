@@ -1,17 +1,28 @@
-About this documentation
-========================
+Title: MAAS | Metal As A Service
 
-This is the documentation for Canonical's MAAS software. If you aren't sure what that is, you should probably skip everything else and head straight to the orientation section where it is explained. Like any software though, it can be frustrating if you don't know how bits of it work, how to achieve certain goals or what to do when things go wrong. Amongst its various sections, this manual aims to answer all those questions and plenty more you haven't even thought of yet.
+# MAAS: Metal As A Service
 
-Getting it
-----------
+This is the documentation for the [MAAS project](http://maas.ubuntu.com).
 
-In a cunning move, the current documentation always lives, and is built from, the main MAAS source code (in the top-level `docs/` directory). That means that whatever MAAS package you have installed, or even if you are really living life on the edge and have checked out a development version from Launchpad, this documentation should be the latest and most appropriate version for the software you are running. However, it is also possible that there have been additional sections, or more helpful and clearer bits added since the package you are using was made. For this reason you can always find the latest documentation online here: http://maas.ubuntu.com\_.
+Metal as a Service -- MAAS -- lets you treat physical servers like virtual
+machines in the cloud. Rather than having to manage each server individually,
+MAAS turns your bare metal into an elastic cloud-like resource.
 
-Contributing
-------------
+What does that mean in practice? Tell MAAS about the machines you want it to
+manage and it will boot them, check the hardware's okay, and have them waiting
+for when you need them. You can then pull nodes up, tear them down and redeploy
+them at will; just as you can with virtual machines in the cloud.
 
-If you have some extra information to add, or think you have spotted an error or something out of date, we really want to hear about it. Please [File a bug report](https://bugs.launchpad.net/maas/+filebug) or [contact us directly](https://launchpad.net/~maas-maintainers/+contactuser). In addition you can talk to us on the Freenode IRC channel \#maas.
+When you're ready to deploy a service, MAAS gives 
+[Juju](https://juju.ubuntu.com/) the nodes it needs to power that service. It's
+as simple as that: no need to manually provision, check and, afterwards,
+clean-up. As your needs change, you can easily scale services up or down. Need
+more power for your Hadoop cluster for a few hours? Simply tear down one of your
+Nova compute nodes and redeploy it to Hadoop. When you're done, it's just as
+easy to give the node back to Nova.
 
-If you see something wrong with this documentation, you can help us fix it. Download the source to MAAS by following the instructions in the hacking guide \<hacking\>, make your changes, and propose a merge against lp:maas on Launchpad. The documentation source lives in the top-level `docs/` directory.
+MAAS is ideal where you want the flexibility of the cloud, and the hassle-free
+power of Juju charms, but you need to deploy to bare metal.
+
+
 

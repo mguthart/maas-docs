@@ -1,58 +1,92 @@
-Command Line Interface
-======================
+Title: MAAS Command Line Interface
+# Command Line Interface
 
-As well as the web interface, many tasks can be performed by accessing the MAAS API directly through the maas command. This section details how to log in with this tool and perform some common operations.
+As well as the web interface, many tasks can be performed by accessing the MAAS 
+API directly through the 'maas' command. This section details how to log in with
+this tool and perform some common operations.
 
-Logging in
-----------
+##Logging in
 
-Before the API will accept any commands from maas, you must first log in. To do this, you need an API key for your MAAS account. A key was generated for you as soon as your account was created, although you can still generate additional keys if you prefer.
 
-The key can be found in the web user interface, or if you have root privileges on the region controller, retrieved from the command line.
+Before the API will accept any commands from maas, you must first log in. To do
+this, you need an API key for your MAAS account. A key was generated for you as
+soon as your account was created, although you can still generate additional
+keys if you prefer.
 
-To obtain the key from the web user interface, log in and click on your user name in the top right corner of the page, and select 'Preferences' from the menu which appears.
+The key can be found in the web user interface, or if you have root privileges
+on the region controller, retrieved from the command line.
 
-![image](media/maascli-prefs.*)
+To obtain the key from the web user interface, log in and click on your user
+name in the top right corner of the page, and select 'Preferences' from the menu
+which appears.
+
+![image](media/maascli-prefs.png)
 
 A new page will load...
 
-![image](media/maascli-key.*)
+![image](media/maascli-key.png)
 
-Your MAAS API keys appear at the top of the preferences form. It's easiest to just select and copy the key (it's quite long!) and then paste it into the command line.
+Your MAAS API keys appear at the top of the preferences form. It's easiest to
+just select and copy the key (it's quite long!) and then paste it into the
+command line.
 
-To obtain the key through the command line, run this command on the region controller (it requires root access):
+To obtain the key through the command line, run this command on the region
+controller (it requires root access):
 
-    $ sudo maas-region-admin apikey my-username
+```bash
+sudo maas-region-admin apikey <username>
+```
 
-(Substitute your MAAS user name for my-username).
+(Substitute your own MAAS user name for "<username>").
 
 Once you have your API key, log in with:
 
-    $ maas login <profile-name> <hostname> <key>
+```bash
+maas login <profile-name> <hostname> <key>
+```
 
-This command logs you in, and creates a "profile" with the profile name you have selected. The profile is an easy way of storing the server URL and your login credentials, and re-using them across command-line invocations. Think of the profile as a persistent session. You can have multiple profiles open at the same time, and so as part of the login command, you assign a unique name to the new profile. Later invocations of the maas command line will refer to the profile by this name.
+This command logs you in, and creates a "profile" with the profile name you have
+selected. The profile is an easy way of storing the server URL and your login
+credentials, and re-using them across command-line invocations. Think of the
+profile as a persistent session. You can have multiple profiles open at the same
+time, and so as part of the login command, you assign a unique name to the new
+profile. Later invocations of the maas command line will refer to the profile
+by this name.
 
 For example, you might log in with a command line like:
 
-    $ maas login my-maas http://10.98.0.13/MAAS/api/1.0
+```bash 
+maas login my-maas http://10.98.0.13/MAAS/api/1.0
     AWSCRMzqMNy:jjk...5e1FenoP82Qm5te2
+```
 
-This creates the profile 'my-maas' and registers it with the given key at the specified API endpoint URL.
+This creates the profile 'my-maas' and registers it with the given key at the
+specified API endpoint URL.
 
-If you omit the API key, the command will prompt you for it in the console. It is also possible to use a hyphen, '-' in place of the API key. In this case the command will read the API key from standard input, as a single line, ignoring whitespace. This mode of input can be useful if you want to read the API key from a file, or if you wish to avoid including the API key in a command line where it may be observed by other users on the system.
+If you omit the API key, the command will prompt you for it in the console. It
+is also possible to use a hyphen, '-' in place of the API key. In this case the
+command will read the API key from standard input, as a single line, ignoring
+whitespace. This mode of input can be useful if you want to read the API key
+from a file, or if you wish to avoid including the API key in a command line
+where it may be observed by other users on the system.
 
-Specifying an empty string instead of an API key will make the profile act as an anonymous user. Some calls in the API are accessible without logging in, but most of them are not.
+Specifying an empty string instead of an API key will make the profile act as an
+anonymous user. Some calls in the API are accessible without logging in, but
+most of them are not.
 
-maas commands
--------------
+## maas commands
+ 
 
-The `maas` command exposes the whole API, so you can do anything you actually *can* do with MAAS using this command. Unsurprisingly, this leaves us with a vast number of options, but before we delve into detail on the specifics, here is a sort of 'cheat-sheet' for common tasks you might want to do using `maas`.
+The `maas` command exposes the whole API, so you can do anything you actually
+*can* do with MAAS using this command. Unsurprisingly, this leaves us with a
+vast number of options, but before we delve into detail on the specifics, here 
+is a sort of 'cheat-sheet' for common tasks you might want to do using `maas`.
 
-> -   Configure DHCP and DNS services \<cli-dhcp\>
-> -   Commission all enlisted nodes \<cli-commission\>
-> -   Setting IPMI power parameters for a node \<cli-power\>
+  -   Configure DHCP and DNS services \<cli-dhcp\>
+  -   Commission all enlisted nodes \<cli-commission\>
+  -   Setting IPMI power parameters for a node \<cli-power\>
 
-The main maas commands are:
+The main `maas` commands are:
 
 list
 

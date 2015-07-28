@@ -1,18 +1,24 @@
-            <h1>User Guide</h1>
+            <h1>About MAAS</h1>
             <ul class="no-margin">
-              <li class=""><a href="about-juju.html">About MAAS</a></li>
-              <li class="sub"><a href="config-aws.html">AAAAAaaaa</a></li>
-              <li class="sub"><a href="config-azure.html">BbbbBB BBB bbbbB /a></li>
-              <li class="sub"><a href="config-digitalocean.html">CCCC ccc CC CCc cc</a></li>
+              <li class=""><a href="about.html">About MAAS</a></li>
+              <li class="sub"><a href=".html">AAAAAaaaa</a></li>
+              <li class="sub"><a href=".html">BbbbBB BBB bbbbB /a></li>
+              <li class="sub"><a href=".html">CCCC ccc CC CCc cc</a></li>
             </ul>
-            <h1>Blah Blah</h1>
+            <h1>Install</h1>
             <ul class="no-margin">
-              <li class=""><a href="authors-intro.html">11111111</a></li>
-              <li class=""><a href="authors-charm-components.html">2xxx2 x2x2x2x</a></li>
+              <li class=""><a href=" install.html">Installing MAAS</a></li>
+              <li class=""><a href=" .html">Configuration</a></li>
               
+            <h1>Nodes</h1>
+            <ul class="no-margin">
+              <li class=""><a href="nodes-adding.html">Adding nodes</a></li>
+              <li class=""><a href="node lifecycle.html">Node lifecycle</a></li>
+            </ul>
+            <h1>How to...</h1>
+            <ul class="no-margin">
+              <li class=""><a href=" install.html">Installing MAAS</a></li>
             <h1>Reference</h1>
             <ul class="no-margin">
-              <li class=""><a href="commands.html">CLI</a></li>
-              <li class=""><a href="reference-constraints.html">Constraints</a></li>
-              <li class=""><a href="reference-release-notes.html">Release notes</a></li>
-            </ul>
+              <li class=""><a href="maas-cli.html">MAAS CLI</a></li>
+              <li class=""><a href="ref-release-notes.html">Release Notes</a></li>
