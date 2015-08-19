@@ -1,6 +1,5 @@
 
-Do I Need MAAS?
----------------
+## Do I Need MAAS?
 
 MAAS certainly isn't for everyone, but why not ask yourself these questions?
 
@@ -11,8 +10,7 @@ You probably *SHOULD* use MAAS if any or all of the following statements are tru
  - You want things to work, repeatably and reliably.
 
 
-A Typical MAAS setup
---------------------
+## A Typical MAAS setup
 
 MAAS is designed to work with your physical hardware, whether your setup includes thousands of server boxes or only a few. The key components of the MAAS software are:
 
@@ -26,8 +24,7 @@ For small (in terms of number of nodes) setups, you will probably just install t
 
 ![image](media/orientation_architecture-diagram.*)
 
-How MAAS is used
-----------------
+## How MAAS is used
 
 MAAS manages a pool of nodes. After registering a new system with the MAAS and preparing it for service ("commissioning"), the new system joins this pool.
 
