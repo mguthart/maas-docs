@@ -24,6 +24,9 @@ For small (in terms of number of nodes) setups, you will probably just install t
 
 ![image](media/orientation_architecture-diagram.*)
 
+## System requirements
+
+
 ## How MAAS is used
 
 MAAS manages a pool of nodes. After registering a new system with the MAAS and preparing it for service ("commissioning"), the new system joins this pool.
