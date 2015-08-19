@@ -1,5 +1,6 @@
-Networks
-========
+Title: Networks
+
+# Networks
 
 !!!**Note:** This feature is available in MAAS versions 1.5 and above, starting with revision 1961. If you're writing a client application, you can check if MAAS supports this feature via the web API; see the documentation for the `networks-management` capability here\<cap-networks-management\>.
 
