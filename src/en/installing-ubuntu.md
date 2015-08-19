@@ -1,23 +1,22 @@
-Installing Ubuntu and deploying nodes
-=====================================
+# Installing Ubuntu and deploying nodes
+
 
 Once a node has been accepted into MAAS and is ready for use, users can deploy services to that node.
 
 Prior to deployment, MAAS is responsible for:
 
-1.  Powering up the node.
-2.  Installing Ubuntu on the node.
-3.  Installing the user's SSH keys on the node.
+1. Powering up the node.
+1. Installing Ubuntu on the node.
+1. Installing the user's SSH keys on the node.
 
 Once these steps have been completed, the node is ready to have services deployed to it, either manually or by using a tool like [Juju](http://juju.ubuntu.com).
 
 There are two ways to install Ubuntu on a node:
 
-1.  The Debian installer \<debian-installer\>.
-2.  The fast installer \<fast-installer\>.
+1. The Debian installer \<debian-installer\>.
+1. The fast installer \<fast-installer\>.
 
-The Debian Installer
---------------------
+## The Debian Installer
 
 The Debian Installer installs Ubuntu on a node in exactly the same way as you would install it manually: using the [Debian Installer](http://www.debian.org/devel/debian-installer/). Answers to the questions asked by the installer are provided in a 'preseed' file. For more information on preseed files, see the Additional
 Configuration \<preseed\> page.
@@ -31,8 +30,7 @@ To set multiple nodes to use the Debian installer, select the `Mark nodes as usi
 Because it installs Ubuntu from scratch, downloading packages as required, the Debian installer is slower than the fast installer
 \<fast-installer\>.
 
-The fast installer
-------------------
+## The fast installer
 
 The fast installer is, as the name suggests, a means of installing Ubuntu on a node more quickly than would be possible using the Debian installer \<debian-installer\>.
 
