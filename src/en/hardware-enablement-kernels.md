@@ -4,7 +4,7 @@
 !!!Note:
 This feature is available in MAAS versions 1.5 and above.
 
-MAAS allows you to use hardware enablement kernels when booting nodes that require them.
+MAAS allows you to use hardware enablement kernels when booting nodes which require them.
 
 ## What are hardware-enablement kernels?
 
