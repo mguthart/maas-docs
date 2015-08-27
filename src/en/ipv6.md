@@ -1,9 +1,8 @@
-Managing IPv6 Networks
-======================
+Title: Managing IPv6 networks | MAAS
 
-> **note**
->
-> This feature is available in MAAS versions 1.7 and above, starting with lp:maas revision 2992. If you're writing a client application that makes use of this feature, you can query the region-server API for the `ipv6-deployment-ubuntu` capability\<cap-ipv6-deployment-ubuntu\>.
+# Managing IPv6 Networks with MAAS
+
+!!!Note: This feature is available in MAAS versions 1.7 and above, starting with lp:maas revision 2992. If you're writing a client application that makes use of this feature, you can query the region-server API for the `ipv6-deployment-ubuntu` capability\<cap-ipv6-deployment-ubuntu\>.
 
 MAAS has limited IPv6 support for networking nodes. It works much like IPv4 support, but with a number of limitations:
 
@@ -21,8 +20,7 @@ The web user interface and REST API can be accessed in the same way on both IPv4
 
 If your MAAS server has a DNS hostname that resolves to both IPv4 and IPv6 addresses, your browser may already be accessing the UI through IPv6 without you noticing.
 
-Enabling IPv6
--------------
+## Enabling IPv6
 
 You enable IPv6 networking in the same way that you enable IPv4 networking: configure a separate cluster interface for your IPv6 subnet, in addition to the one you need for your IPv4 subnet. The IPv6 cluster interface must define a static address range. Provided that you already have a functioning IPv6 network, that's all there is to it. The following sections will go into more detail about what is supported, what is needed, and what to do if you don't yet have a functioning IPv6 network.
 
@@ -54,8 +52,7 @@ Static IPv6 addresses are currently only configured on Ubuntu, when installed us
 
 However, as long as the address remains allocated to the node, you may still configure its operating system to use that address. The node can then use that address as if it had been configured by MAAS.
 
-Disabling IPv4
---------------
+## Disabling IPv4
 
 For advanced users, there is an experimental capability to deploy nodes with pure IPv6, with IPv4 networking disabled. To enable this on a node, check the "Disable IPv4 when deployed" box on the node's Edit page. The process of managing and deploying the node will still largely work through IPv4, but once deployed, the node will have IPv6 networking only.
 
@@ -69,7 +66,9 @@ By default, this URL is set based on the region controller's IPv4 address. To ma
 
 To change this setting, run:
 
-    dpkg-reconfigure maas-cluster-controller
+```bash
+dpkg-reconfigure maas-cluster-controller
+```
 
 It will prompt you for the URL, with its current setting as the initial value.
 
