@@ -1,9 +1,6 @@
-Physical Zones
-==============
+Title: Physical Zones | MAAS
 
-> **note**
-
-> This feature is only available in MAAS versions 1.5 and above.
+# Using Zones
 
 To help you maximise fault-tolerance and performance of the services you deploy, MAAS administrators can define *physical zones* (or just *zones* for short), and assign nodes to them. When a user requests a node, they can ask for one that is in a specific zone, or one that is not in a specific zone.
 
@@ -11,10 +8,9 @@ It's up to you as an administrator to decide what a physical zone should represe
 
 Each node is in one and only one physical zone. Each MAAS instance ships with a default zone to which nodes are attached by default. If you do not need this feature, you can simply pretend it does not exist.
 
-Applications
-------------
+# Applications
 
-Since you run your own MAAS, its physical zones give you more flexibility than those of a third-party hosted cloud service. That means that you get to design your zones and define what they mean. Below are some examples of how physical zones can help you get the most out of your MAAS.
+Since you run your own MAAS, the physical zones feature gives you more flexibility than those of a third-party hosted cloud service. That means that you get to design your zones and define what they mean. Below are some examples of how physical zones can help you get the most out of your MAAS.
 
 ### Using Zones for Fault Tolerance
 
@@ -38,8 +34,7 @@ In another example, your application may rely on a third-party service available
 
 If you are concerned about power density and cooling, you can lay out your physical zones to match server racks. Instead of allocating machines that share a physical zone, you can spread out the load by ensuring that "hot" systems are in located different zones.
 
-Creating a Zone
----------------
+# Creating a Zone
 
 Only administrators can create and manage zones. To create a physical zone in the web user interface, log in as an administrator and browse to the "Zones" section in the top bar. This will takes you to the zones listing page. At the bottom of the page is a button for creating a new zone:
 
@@ -47,15 +42,13 @@ Only administrators can create and manage zones. To create a physical zone in th
 
 Or to do it in the region-controller API \<region-controller-api\>, POST your zone definition to the *"zones"* endpoint.
 
-Assigning Nodes to a Zone
--------------------------
+# Assigning Nodes to a Zone
 
 Once you have created one or more physical zones, you can set nodes' zones from the nodes listing page in the UI. Select the nodes for which you wish to set a zone, and choose "Set physical zone" from the "Bulk action" dropdown list near the top. A second dropdown list will appear, to let you select which zone you wish to set. Leave it blank to clear nodes' physical zones. Clicking "Go" will apply the change to the selected nodes.
 
 You can also set an individual node's zone on its "Edit node" page. Both ways are available in the API as well: edit an individual node through a `PUT` request to the node's URI, or set the zone on multiple nodes at once by calling the `set_zone` operation on the `nodes` endpoint.
 
-Allocating a Node in a Zone
----------------------------
+# Allocating a Node in a Zone
 
 To deploy in a particular zone, call the `acquire` method in the region-controller API \<region-controller-api\> as before, but pass the `zone` parameter with the name of the zone. The method will allocate a node in that zone, or fail with an HTTP 409 ("conflict") error if the zone has no nodes available that match your request.
 
