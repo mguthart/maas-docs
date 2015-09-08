@@ -6,18 +6,24 @@ Changelog
 
 ### Bug Fix Update
 
-\#1441933 Internal Server Error when saving a cluster without Router IP 
-\#1441133 MAAS version not exposed over the API 
-\#1437094 Sorting by mac address on webui causes internal server error 
-\#1439359 Automatically set correct boot resources selection and start import after upgrade from MAAS 1.5; Ensures MAAS is usable after upgrade. 
-\#1439366 Backwards compatibility with MAAS 1.5 preseeds and custom preseeds. Ensures that users dont have to manually change preseeds names.
+ - \#1441933 Internal Server Error when saving a cluster without Router IP 
+ - \#1441133 MAAS version not exposed over the API 
+ - \#1437094 Sorting by mac address on webui causes internal server error 
+ - \#1439359 Automatically set correct boot resources selection and start import after upgrade from MAAS 1.5; Ensures MAAS is usable after upgrade. 
+ - \#1439366 Backwards compatibility with MAAS 1.5 preseeds and custom preseeds. Ensures that users dont have to manually change preseeds names.
 
 1.7.2
 -----
 
 ### Bug Fix Update
 
-\#1331214 Support AMT Version \> 8 \#1397567 Fix call to amttool when restarting a node to not fail disk erasing. \#1415538 Do not generate the 'option routers' stanza if router IP is None. \#1403909 Do not deallocate StaticIPAddress before node has powered off. \#1405998 Remove all OOPS reporting. \#1423931 Update the nodes host maps when a sticky ip address is claimed over the API. \#1433697 Look for bootloaders in /usr/lib/EXTLINUX
+ - \#1331214 Support AMT Version \> 8 
+ - \#1397567 Fix call to amttool when restarting a node to not fail disk erasing. 
+ - \#1415538 Do not generate the 'option routers' stanza if router IP is None. 
+ - \#1403909 Do not deallocate StaticIPAddress before node has powered off. 
+ - \#1405998 Remove all OOPS reporting. 
+ - \#1423931 Update the nodes host maps when a sticky ip address is claimed over the API. 
+ - \#1433697 Look for bootloaders in /usr/lib/EXTLINUX
 
 1.7.1
 -----
