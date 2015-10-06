@@ -17,8 +17,6 @@
                <li class=""><a href="config-static-ip.html">Static IP addresses</a></li>
             </ul>
             
-            
-              <li class=""><a href=" .html">Configuration</a></li>
               
             <h3>Nodes</h3>
             <ul class="no-margin">
