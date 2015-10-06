@@ -5,6 +5,15 @@
             <h1>Install</h1>
             <ul class="no-margin">
               <li class=""><a href=" install.html">Installing MAAS</a></li>
+            </ul>  
+            <h1>Configuration</h1>
+            <ul class="no-margin">
+               <li class=""><a href="config-cluster.html">Cluster configuration</a></li>
+               <li class=""><a href="config-network.html">Adding networks</a></li>
+               <li class=""><a href="config-boot.html"> Sources</a></li>
+            </ul>
+            
+            
               <li class=""><a href=" .html">Configuration</a></li>
               
             <h1>Nodes</h1>
