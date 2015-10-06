@@ -1,7 +1,8 @@
 
 build:
 	tools/mdbuild.py
-
+	cp -R resources _build/
+	cp -R media _build/
 serve:
 	python -m SimpleHTTPServer
 
