@@ -1,192 +1,314 @@
-Installing MAAS
-===============
+### Navigation
 
-There are two main ways to install MAAS:
+-   [next](cluster-configuration.html "Cluster Configuration")
+-   [previous](install.html "Installing MAAS") |
+-   [MAAS 1.8 documentation](index.html) »
 
-> -   From Ubuntu's package archive on an existing Ubuntu
->     install. \<pkg-install\>
-> -   As a fresh install from Ubuntu Server install
->     media. \<disc-install\>
+Additional Configuration[¶](#additional-configuration "Permalink to this headline")
+===================================================================================
 
-If you are interested in testing the latest development version you can also check out the very latest source and build MAAS — see the hacking guide \<hacking\> — or use the [Testing PPA](https://launchpad.net/~maas-maintainers/+archive/ubuntu/testing) or the [Daily PPA](https://launchpad.net/~maas-maintainers/+archive/ubuntu/dailybuilds). Note that these PPAs contain development versions of MAAS that are potentially unstable, so use with caution.
+Manual DHCP configuration[¶](#manual-dhcp-configuration "Permalink to this headline")
+-------------------------------------------------------------------------------------
 
-Installing MAAS from the archive
---------------------------------
+DHCP is needed in order for MAAS to boot and control nodes. However,
+there are some circumstances under which you may not wish a cluster
+controller to handle DHCP address assignments for the network. In these
+instances, the existing DHCP server for the network will need its
+configuration altered to allow MAAS to enlist and control nodes
+automatically.
 
-Installing MAAS from packages is thankfully straightforward. There are actually several packages that go into making up a working MAAS install, but for convenience, many of these have been gathered into a virtual package called 'maas' which will install the necessary components for a 'seed cloud', that is a single server that will directly control a group of nodes. The main packages are:
+Note
 
-> -   `maas` - seed cloud setup, which includes both the region controller and the cluster controller below.
-> -   `maas-region-controller` - includes the web UI, API and database.
-> -   `maas-cluster-controller` - controls a group ("cluster") of nodes including DHCP management.
-> -   `maas-dhcp`/`maas-dns` - required when managing dhcp/dns.
+If you don’t let MAAS manage DHCP, then MAAS will not be able to
+allocate its [*static IP
+addresses*](cluster-configuration.html#static-ip-address) to Nodes.
 
-If you need to separate these services or want to deploy an additional cluster controller, you should install the corresponding packages individually (see the description of a typical setup \<setup\> for more background on how a typical hardware setup might be arranged).
+At the very least the “filename” option should be set to “pxelinux.0”.
 
-There are two suggested additional packages 'maas-dhcp' and 'maas-dns'. These set up MAAS-controlled DHCP and DNS services which greatly simplify deployment if you are running a typical setup where the MAAS controller can run the network (Note: These **must** be installed if you later set the options in the web interface to have MAAS manage DHCP/DNS). If you need to integrate your MAAS setup under an existing DHCP setup, see manual-dhcp
+How to configure this depends on what software you use as a DHCP server.
+If you are using the ISC DHCP server, for example, the configuration
+entry might look something like this:
 
-> **note**
+    subnet 192.168.122.0 netmask 255.255.255.0 {
+        filename "pxelinux.0";
+        option subnet-mask 255.255.255.0;
+        option broadcast-address 192.168.122.255;
+        option domain-name-servers 192.168.122.136;
+        range dynamic-bootp 192.168.122.5 192.168.122.135;
+    }
 
-> A more up-to-date MAAS is available for the most recent Ubuntu LTS release in the Canonical cloud archive. You can activate the archive with `sudo add-apt-repository cloud-archive:tools`. Using packages from this archive is recommended as it contains important fixes and new features that are not always available in the Ubuntu archive.
+When doing this, leave the cluster controller’s interface in the
+“unmanaged” state.
 
-### Install packages
+If your cluster controller is in charge of nodes on more than one
+network through different network interfaces, there is an additional
+complication. Without the DHCP server built into the cluster controller,
+MAAS may not know which of the cluster controller’s IP addresses each
+node should use for downloading its installer image. If you want to
+support this situation, ensure that all of the nodes can reach all of
+the cluster controller’s network addresses.
 
-At the command line, type:
+SSL Support[¶](#ssl-support "Permalink to this headline")
+---------------------------------------------------------
 
-    $ sudo apt-get install maas maas-dhcp maas-dns
+If you want secure access to your MAAS web UI/API, you need to do a few
+things. First, turn on SSL support in Apache:
 
-You will see a list of packages and a confirmation message to proceed. The exact list will obviously depend on what you already have installed on your server, but expect to add about 200MB of files.
+    $ sudo a2enmod ssl
 
-The configuration for the MAAS controller will automatically run and pop up this config screen:
+Ensure that the Apache config file from
+`etc/maas/maas-http.conf`{.docutils .literal} is included in
+`/etc/apache2/conf.d/`{.docutils .literal}, then edit
+`/etc/maas/maas_local_settings.py`{.docutils .literal} and change
+DEFAULT\_MAAS\_URL so that it uses https instead of http.
 
-![image](media/install_cluster-config.*)
+Now, restart Apache:
 
-Here you will need to enter the hostname for where the region controller can be contacted. In many scenarios, you may be running the region controller (i.e. the web and API interface) from a different network address, for example where a server has several network interfaces.
+    $ sudo service apache2 restart
 
-Once the configuration scripts have run you should see this message telling you that the system is ready to use:
+At this point you will be able to access the MAAS web server using https
+but the default SSL certificate is insecure. Please generate your own
+and then edit `/etc/apache2/conf.d/maas-http.conf`{.docutils .literal}
+to set the location of the certificate.
 
-![image](media/install_controller-config.*)
+Choosing a series to install[¶](#choosing-a-series-to-install "Permalink to this headline")
+-------------------------------------------------------------------------------------------
 
-The web server is started last, so you have to accept this message before the service is run and you can access the Web interface. Then there are just a few more setup steps post\_install
+You may have some specific reason to choose a particular version of
+Ubuntu to install on your nodes, perhaps based around package
+availability, hardware support or some other reason.
+
+It is possible to choose a specific series from those available in a
+number of ways.
+
+### From the user interface[¶](#from-the-user-interface "Permalink to this headline")
+
+The web-based user interface makes it easy to select which Ubuntu series
+you wish to install on an individual node. When either adding a node
+manually, or on the node page when the node has been automatically
+discovered but before it is accepted, there is a drop down menu to
+select the version of Ubuntu you wish to install.
+
+![](_images/series.png)
+
+The menu will always list all the currently available series according
+to which boot images are available.
+
+### Using the maas command[¶](#using-the-maas-command "Permalink to this headline")
+
+It is also possible to select a series using the maas command. This can
+be done on a per node basis with:
+
+    $ maas <profile> node update <system_id> distro_series="<value>"
+
+Where the string contains one of the valid, available distro series
+(e.g. “trusty”) or is empty for the default value.
+
+Altering the Preseed file[¶](#altering-the-preseed-file "Permalink to this headline")
+-------------------------------------------------------------------------------------
+
+Warning
+
+Do not try to alter the preseed files if you don’t have a good
+understanding of what you are doing. Altering the installed version of
+Ubuntu can prevent MAAS from working as intended, and may have security
+and stability consequences.
+
+When MAAS commissions a node it installs a version of Ubuntu. The
+installation is performed using a ‘preseed’ file, which is effectively a
+list of answers to the questions you would get were you to run the
+installer manually. The preseed file used by MAAS is carefully made so
+that the target node can be brought up and do all the jobs expected of
+it. However, in exceptional circumstances, you may wish to alter the
+pressed file to work around some issue. There are actually two preseed
+files, stored here:
+
+    /etc/maas/preseeds/generic
+    /etc/maas/preseeds/preseed-master
+
+The generic file actually references the preseed-master file, and is
+used to set conditional parameters based on the type of series and
+architecture to install as well as to define the minimum set of install
+packages and to tidy up the PXE boot process if that has been used for
+the node. Unless you have a specific need to change where install
+packages come from, you should not need to edit this file.
+
+For the more usual sorts of things you may wish to change, you should
+edit the preseed-master file. For example, depending on your network you
+may wish to change the clock settings:
 
-Installing MAAS from Ubuntu Server boot media
----------------------------------------------
+    # Local clock (set to UTC and use ntp)
+    d-i     clock-setup/utc boolean true
+    d-i     clock-setup/ntp boolean true
+    d-i     clock-setup/ntp-server  string ntp.ubuntu.com
+
+Having consistent clocks is very important to the working of your MAAS
+system overall. If your nodes however cannot freely access the Internet,
+the supplied NTP server is not going to be very useful, and you may find
+it better to run an ntp service on the MAAS controller and change the
+ntp.ubuntu.com in the last line for a more appropriate server.
+
+One thing you may wish to alter in the preseed file is the disk
+partitioning. This is a simple recipe that creates a swap partition and
+uses the rest of the disk for one large root filesystem:
+
+    partman-auto/text/atomic_scheme ::
+
+    500 10000 1000000 ext3
+            $primary{ }
+            $bootable{ }
+            method{ format }
+            format{ }
+            use_filesystem{ }
+            filesystem{ ext3 }
+            mountpoint{ / } .
 
-If you are installing MAAS as part of a fresh install it is easiest to choose the "Multiple Server install with MAAS" option from the installer and have pretty much everything set up for you. Boot from the Ubuntu Server media and you will be greeted with the usual language selection screen:
+    64 512 300% linux-swap
+            method{ swap }
+            format{ } .
 
-![image](media/install_01.*)
+Here the root partition must be at least 500 mb, and has effectively no
+maximum size. The swap partition ranges from 64 MB to 3 times the
+system’s ram. Adding \$bootable{ } to make the partition bootable, and
+\$primary{ } marks it as the primary partition. The other specifiers
+used are:
 
-On the next screen, you will see there is an entry in the menu called "Multiple server install with MAAS". Use the cursor keys to select this and then press Enter.
+*method{ format }*
+:   Used to make the partition be formatted. For swap partitions, change
+    it to “swap”. To create a new partition but do not format it, change
+    “format” to “keep” (such a partition can be used to reserve for
+    future use some disk space).
+*format{ }*
+:   Also needed to make the partition be formatted.
+*use\_filesystem{ }*
+:   Specifies that the partition has a filesystem on it.
+*filesystem{ ext3 }*
+:   Specifies the filesystem to put on the partition.
+*mountpoint{ / }*
+:   Where to mount the partition.
+
+For more information on preseed options, you should refer to [the
+official Ubuntu
+documentation](https://help.ubuntu.com/12.04/installation-guide/i386/preseed-contents.html)
+
+Note
+
+Future versions of MAAS are likely to replace this type of automatic
+installation with a different installer.
+
+Installing additional clusters[¶](#installing-additional-clusters "Permalink to this headline")
+-----------------------------------------------------------------------------------------------
 
-![image](media/install_02.*)
+In an environment comprising large numbers of nodes, it is likely that
+you will want to organise the nodes on a more distributed basis. The
+standard install of the MAAS region controller includes a cluster
+controller, but it is possible to add additional cluster controllers to
+the configuration, as shown in the diagram below:
 
-The installer then runs through the usual language and keyboard options. Make your selections using Tab/Cursor keys/Enter to proceed through the install. The installer will then load various drivers, which may take a moment or two.
+![](_images/orientation_architecture-diagram.png)
 
-![image](media/install_03.*)
+Each cluster controller will need to run on a separate Ubuntu server.
+Installing and configuring the software is straightforward though:
 
-The next screen asks for the hostname for this server. Choose something appropriate for your network.
+    $ sudo apt-get install maas-cluster-controller
 
-![image](media/install_04.*)
+This meta-package will install all the basic requirements of the system.
+However, you may also wish or need to run DHCP and/or DNS services, in
+which case you should also specify these:
 
-Finally we get to the MAAS part! Here there are just two options. We want to "Create a new MAAS on this server" so go ahead and choose that one.
+    $ sudo apt-get install maas-cluster-controller maas-dhcp maas-dns
 
-![image](media/install_05.*)
+### Configuring the cluster controller[¶](#configuring-the-cluster-controller "Permalink to this headline")
 
-The install now continues as usual. Next you will be prompted to enter a username. This will be the admin user for the actual server that MAAS will be running on (not the same as the MAAS admin user!)
+Once the packages are installed, the cluster controller needs to know
+where to look for the region controller. This is achieved using dpkg to
+configure the software:
 
-![image](media/install_06.*)
+    $ dpkg-reconfigure maas-cluster-controller
 
-As usual you will have the chance to encrypt your home directory. Continue to make selections based on whatever settings suit your usage.
+![](_images/cluster-config.png)
 
-![image](media/install_07.*)
+The configuration script should then bring up a screen where you can
+enter the IP address of the region controller. Additionally, you will
+need to import the distro image files locally for commissioning:
 
-After making selections and partitioning storage, the system software will start to be installed. This part should only take a few minutes.
+    $ maas maas node-groups import-boot-images
 
-![image](media/install_09.*)
+…and optionally set up the DHCP and DNS for the cluster by either:
 
-Various packages will now be configured, including the package manager and update manager. It is important to set these up appropriately so you will receive timely updates of the MAAS server software, as well as other essential services that may run on this server.
+*Using the web UI*
+:   Follow the instructions at [*Cluster
+    Configuration*](cluster-configuration.html) to use the web UI to set
+    up your cluster controller.
+*Using the command line client*
+:   First [*logging in to the API*](maascli.html#api-key) and then
+    [*following this procedure*](maascli.html#cli-dhcp)
 
-![image](media/install_10.*)
+Client-side DNS configuration[¶](#client-side-dns-configuration "Permalink to this headline")
+---------------------------------------------------------------------------------------------
 
-The configuration for MAAS will ask you to configure the host address of the server. This should be the IP address you will use to connect to the server (you may have additional interfaces e.g. to run node subnets)
+When using a third party tool such as `juju`{.docutils .literal} it will
+need to be able to resolve the hostnames that the MAAS API returns to
+it. In order for this to happen, *client-side DNS* must be configured to
+point to MAAS’s DNS server. Generally speaking, this is a simple case of
+adding the following line to the `/etc/resolv.conf`{.docutils .literal}
+file on your client host:
 
-![image](media/install_cluster-config.*)
+    nameserver <IP OF MAAS DNS HOST>
 
-The next screen will confirm the web address that will be used to the web interface.
+replacing the \<IP OF MAAS DNS HOST\> with the actual IP address of the
+host running the MAAS DNS server.
 
-![image](media/install_controller-config.*)
+However, for hosts using the `resolvconf`{.docutils .literal} package,
+please read its documentation for more information.
 
-After configuring any other packages the installer will finally come to and end. At this point you should eject the boot media.
+[![MAAS
+logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-![image](media/install_14.*)
+MAAS {style="text-align:center;"}
+----
 
-After restarting, you should be able to login to the new server with the information you supplied during the install. The MAAS software will run automatically.
+Metal As A Service.
 
-![image](media/install_15.*)
+\
+ \
 
-**NOTE:** The maas-dhcp and maas-dns packages should be installed by default, but on older releases of MAAS they won't be. If you want to have MAAS run DHCP and DNS services, you should install these packages. Check whether they are installed with:
+-   [Additional Configuration](#)
+    -   [Manual DHCP configuration](#manual-dhcp-configuration)
+    -   [SSL Support](#ssl-support)
+    -   [Choosing a series to install](#choosing-a-series-to-install)
+        -   [From the user interface](#from-the-user-interface)
+        -   [Using the maas command](#using-the-maas-command)
+    -   [Altering the Preseed file](#altering-the-preseed-file)
+    -   [Installing additional
+        clusters](#installing-additional-clusters)
+        -   [Configuring the cluster
+            controller](#configuring-the-cluster-controller)
+    -   [Client-side DNS configuration](#client-side-dns-configuration)
 
-    $ dpkg -l maas-dhcp maas-dns
+### Related Topics
 
-If they are missing, then:
+-   [Documentation overview](index.html)
+    -   Previous: [Installing MAAS](install.html "previous chapter")
+    -   Next: [Cluster
+        Configuration](cluster-configuration.html "next chapter")
 
-    $ sudo apt-get install maas-dhcp maas-dns
+### This Page
 
-And then proceed to the post-install setup below.
+-   [Show Source](_sources/configure.txt)
 
-Post-Install tasks
-==================
+### Quick search
 
-Your MAAS is now installed, but there are a few more things to be done. If you now use a web browser to connect to the region controller, you should see that MAAS is running, but there will also be some errors on the screen:
+Enter search terms or a module, class or function name.
 
-![image](media/install_web-init.*)
+### Navigation
 
-The on screen messages will tell you that there are no boot images present, and that you can't login because there is no admin user.
+-   [next](cluster-configuration.html "Cluster Configuration")
+-   [previous](install.html "Installing MAAS") |
+-   [MAAS 1.8 documentation](index.html) »
 
-Create a superuser account
---------------------------
+© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
+registered trademarks of [Canonical Ltd](http://canonical.com).
 
-Once MAAS is installed, you'll need to create an administrator account:
-
-    $ sudo maas-region-admin createadmin --username=root --email=MYEMAIL@EXAMPLE.COM
-
-Substitute your own email address for <MYEMAIL@EXAMPLE.COM>. You may also use a different username for your administrator account, but "root" is a common convention and easy to remember. The command will prompt for a password to assign to the new user.
-
-You can run this command again for any further administrator accounts you may wish to create, but you need at least one.
-
-Log in on the server
---------------------
-
-Looking at the region controller's main web page again, you should now see a login screen. Log in using the user name and password which you have just created.
-
-![image](media/install-login.*)
-
-Import the boot images
-----------------------
-
-Since version 1.7, MAAS stores the boot images in the region controller's database, from where the cluster controllers will synchronise with the region and pull images from the region to the cluster's local disk. This process is automatic and MAAS will check for and download new Ubuntu images every hour.
-
-However, on a new installation you'll need to start the import process manually once you have set up your MAAS region controller. There are two ways to start the import: through the web user interface, or through the remote API.
-
-To do it in the web user interface, go to the Images tab, check the boxes to say which images you want to import, and click the "Import images" button at the bottom of the Ubuntu section.
-
-![image](media/import-images.*)
-
-A message will appear to let you know that the import has started, and after a while, the warnings about the lack of boot images will disappear.
-
-It may take a long time, depending on the speed of your Internet connection for import process to complete, as the images are several hundred megabytes. The import process will only download images that have changed since last import. You can check the progress of the import by hovering over the spinner next to each image.
-
-The other way to start the import is through the region-controller API \<region-controller-api\>, which you can invoke most conveniently through the command-line interface \<cli\>.
-
-To do this, connect to the MAAS API using the "maas" command-line client. See Logging in \<api-key\> for how to get set up with this tool. Then, run the command:
-
-    $ maas my-maas-session boot-resources import
-
-(Substitute a different profile name for 'my-maas-session' if you have named yours something else.) This will initiate the download, just as if you had clicked "Import images" in the web user interface.
-
-By default, the import is configured to download the most recent LTS release only for the amd64 architecture. Although this should suit most needs, you can change the selections on the Images tab, or over the API. Read customise boot sources \</bootsources\> to see examples on how to do that.
-
-Speeding up repeated image imports by using a local mirror
-----------------------------------------------------------
-
-See sstreams-mirror for information on how to set up a mirror and configure MAAS to use it.
-
-Configure DHCP
---------------
-
-If you want MAAS to control DHCP, you can either:
-
-1.  Follow the instructions at cluster-configuration to use the web UI to set up your cluster controller.
-2.  Use the command line interface maas by first logging in to the API \<api-key\> and then following this procedure \<cli-dhcp\>
-
-If you are manually configuring a DHCP server, you should take a look at manual-dhcp
-
-Configure switches on the network
----------------------------------
-
-Some switches use Spanning-Tree Protocol (STP) to negotiate a loop-free path through a root bridge. While scanning, it can make each port wait up to 50 seconds before data is allowed to be sent on the port. This delay in turn can cause problems with some applications/protocols such as PXE, DHCP and DNS, of which MAAS makes extensive use.
-
-To alleviate this problem, you should enable [Portfast](https://www.symantec.com/business/support/index?page=content&id=HOWTO6019) for Cisco switches or its equivalent on other vendor equipment, which enables the ports to come up almost immediately.
-
-Once everything is set up and running, you are ready to start
-enlisting nodes \<nodes\>
-
+Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
+date: 2015-08-12 22:30:33 +0100.
