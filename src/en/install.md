@@ -264,8 +264,9 @@ To do this, connect to the MAAS API using the “maas” command-line
 client. See [*Logging in*](maascli.html#api-key) for how to get set up
 with this tool. Then, run the command:
 
-    $ maas my-maas-session boot-resources import
-
+```bash
+maas my-maas-session boot-resources import
+```
 (Substitute a different profile name for ‘my-maas-session’ if you have
 named yours something else.) This will initiate the download, just as if
 you had clicked “Import images” in the web user interface.
@@ -276,14 +277,12 @@ needs, you can change the selections on the Images tab, or over the API.
 Read [*customise boot sources*](bootsources.html) to see examples on how
 to do that.
 
-Speeding up repeated image imports by using a local mirror[¶](#speeding-up-repeated-image-imports-by-using-a-local-mirror "Permalink to this headline")
--------------------------------------------------------------------------------------------------------------------------------------------------------
+## Speeding up repeated image imports by using a local mirror
 
 See [*Local Mirroring of Boot Images*](sstreams-mirror.html) for
 information on how to set up a mirror and configure MAAS to use it.
 
-Configure DHCP[¶](#configure-dhcp "Permalink to this headline")
----------------------------------------------------------------
+## Configure DHCP
 
 If you want MAAS to control DHCP, you can either:
 
@@ -297,8 +296,7 @@ If you want MAAS to control DHCP, you can either:
 If you are manually configuring a DHCP server, you should take a look at
 [*Manual DHCP configuration*](configure.html#manual-dhcp)
 
-Configure switches on the network[¶](#configure-switches-on-the-network "Permalink to this headline")
------------------------------------------------------------------------------------------------------
+## Configure switches on the network
 
 Some switches use Spanning-Tree Protocol (STP) to negotiate a loop-free
 path through a root bridge. While scanning, it can make each port wait
@@ -311,14 +309,13 @@ To alleviate this problem, you should enable
 for Cisco switches or its equivalent on other vendor equipment, which
 enables the ports to come up almost immediately.
 
-Traffic between the region contoller and cluster controllers[¶](#traffic-between-the-region-contoller-and-cluster-controllers "Permalink to this headline")
------------------------------------------------------------------------------------------------------------------------------------------------------------
+## Traffic between the region contoller and cluster controllers
 
--   Each cluster controller must be able to:
-    -   Initiate TCP connections (for HTTP) to each region controller on
+  -   Each cluster controller must be able to:
+  -   Initiate TCP connections (for HTTP) to each region controller on
         port 80 or port 5240, the choice of which depends on the setting
         of `MAAS_URL`{.docutils .literal}.
-    -   Initiate TCP connections (for RPC) to each region controller
+  -   Initiate TCP connections (for RPC) to each region controller
         between port 5250 and 5259 inclusive. This permits up to 10
         `maas-regiond`{.docutils .literal} processes on each region
         controller host. At present this is not configurable.
@@ -326,57 +323,4 @@ Traffic between the region contoller and cluster controllers[¶](#traffic-betwee
 Once everything is set up and running, you are ready to [*start
 enlisting nodes*](nodes.html)
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Installing MAAS](#)
-    -   [Installing MAAS from the
-        archive](#installing-maas-from-the-archive)
-        -   [Install packages](#install-packages)
-    -   [Installing MAAS from Ubuntu Server boot
-        media](#installing-maas-from-ubuntu-server-boot-media)
--   [Post-Install tasks](#post-install-tasks)
-    -   [Create a superuser account](#create-a-superuser-account)
-    -   [Log in on the server](#log-in-on-the-server)
-    -   [Import the boot images](#import-the-boot-images)
-    -   [Speeding up repeated image imports by using a local
-        mirror](#speeding-up-repeated-image-imports-by-using-a-local-mirror)
-    -   [Configure DHCP](#configure-dhcp)
-    -   [Configure switches on the
-        network](#configure-switches-on-the-network)
-    -   [Traffic between the region contoller and cluster
-        controllers](#traffic-between-the-region-contoller-and-cluster-controllers)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Changelog](changelog.html "previous chapter")
-    -   Next: [Additional Configuration](configure.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/install.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](configure.html "Additional Configuration")
--   [previous](changelog.html "Changelog") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.

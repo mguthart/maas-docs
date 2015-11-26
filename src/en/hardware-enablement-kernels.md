@@ -1,21 +1,12 @@
-### Navigation
+# Using hardware-enablement kernels
 
--   [next](sstreams-mirror.html "Local Mirroring of Boot Images")
--   [previous](nodes.html "Adding nodes to the system") |
--   [MAAS 1.8 documentation](index.html) »
 
-Using hardware-enablement kernels[¶](#using-hardware-enablement-kernels "Permalink to this headline")
-=====================================================================================================
-
-Note
-
-This feature is available in MAAS versions 1.5 and above.
+!!! Note: This feature is available in MAAS versions 1.5 and above.
 
 MAAS allows you to use hardware enablement kernels when booting nodes
 that require them.
 
-What are hardware-enablement kernels?[¶](#what-are-hardware-enablement-kernels "Permalink to this headline")
-------------------------------------------------------------------------------------------------------------
+## What are hardware-enablement kernels?
 
 Brand new hardware gets released all the time. We want that hardware to
 work well with Ubuntu and MAAS, even if it was released after the latest
@@ -39,8 +30,7 @@ For more information see the [LTS Enablement
 Stack](https://wiki.ubuntu.com/Kernel/LTSEnablementStack) page on the
 Ubuntu wiki.
 
-Booting hardware-enablement kernels[¶](#booting-hardware-enablement-kernels "Permalink to this headline")
----------------------------------------------------------------------------------------------------------
+## Booting hardware-enablement kernels
 
 MAAS imports hardware-enablement kernels along with its generic boot
 images, but as different “sub-architectures” to the default “generic”
@@ -55,59 +45,17 @@ kernel for Ubuntu 14.04 Trusty Tahr, for example, may require
 The quickest way to make a node use a hardware-enablement kernel is by
 using the MAAS command, like this:
 
-    $ maas <profile-name> node update <system-id>
-      architecture=amd64/hwe-t
+```bash
+maas <profile-name> node update <system-id> architecture=amd64/hwe-t
+```
 
 If you specify an architecture that doesn’t exist (e.g.
-`amd64/hwe-zz`{.docutils .literal}), the `maas`{.docutils .literal}
+`amd64/hwe-zz`), the `maas`
 command will return an error.
 
 It’s also possible to use HWE kernels from the MAAS web UI, by visiting
-the Node’s page and clicking `Edit node`{.docutils .literal}. Under the
+the Node’s page and clicking `Edit node`. Under the
 Architecture field, you will be able to select any HWE kernels that have
 been imported onto that node’s cluster controller.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Using hardware-enablement kernels](#)
-    -   [What are hardware-enablement
-        kernels?](#what-are-hardware-enablement-kernels)
-    -   [Booting hardware-enablement
-        kernels](#booting-hardware-enablement-kernels)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Adding nodes to the
-        system](nodes.html "previous chapter")
-    -   Next: [Local Mirroring of Boot
-        Images](sstreams-mirror.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/hardware-enablement-kernels.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](sstreams-mirror.html "Local Mirroring of Boot Images")
--   [previous](nodes.html "Adding nodes to the system") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
