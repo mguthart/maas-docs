@@ -75,7 +75,8 @@ maas $PROFILE boot-source update 1 url="http://custom.url" keyring_filename="" k
 
 You can also add a new source:
 
-    $ maas $PROFILE boot-sources create url=http://my.url keyring_filename="" keyring_data@=./ custom_keyring_file
+```no-highlight
+     maas $PROFILE boot-sources create url=http://my.url keyring_filename="" keyring_data@=./ custom_keyring_file
     {
         "url": "http://my.url/",
         "keyring_data": "ZW1wdHkK",
@@ -83,10 +84,12 @@ You can also add a new source:
         "id": 2,
         "resource_uri": "<url omitted for readability>"
     }
+```
 
 Inside that newly created source ('2') you can add selections:
 
-    $ maas $PROFILE boot-source-selections create 2 os="ubuntu" release="trusty" arches="amd64" subarches="*" labels='*'
+```no-highlight
+     maas $PROFILE boot-source-selections create 2 os="ubuntu" release="trusty" arches="amd64" subarches="*" labels='*'
     {
         "labels": ["*"],
         "arches": ["amd64"],
@@ -95,6 +98,7 @@ Inside that newly created source ('2') you can add selections:
         "id": 3,
         "resource_uri": "<url omitted for readability>"
     }
+```
 
 ## Deleting a source
 
@@ -102,4 +106,7 @@ Let's say you need to delete the newly added source.
 
 To delete the source:
 
-    $ maas $PROFILE boot-source delete 2
+```bash
+maas $PROFILE boot-source delete 2
+```
+
