@@ -1,12 +1,5 @@
-### Navigation
 
--   [next](physical-zones.html "Physical Zones")
--   [previous](juju-quick-start.html "Juju Quick Start") |
--   [MAAS 1.8 documentation](index.html) »
-
-Making use of Tags[¶](#making-use-of-tags "Permalink to this headline")
-=======================================================================
-
+# Making use of Tags
 MAAS implements a system of tags based on the physical properties of the
 nodes. The idea behind this is that you can use the tags to identify
 nodes with particular abilities which may be useful when it comes to
@@ -16,8 +9,7 @@ A real world example of this might be to identify nodes which have fast
 GPUs installed, if you were planning on deploying software which used
 CUDA or OpenCL which would make use of this hardware.
 
-Tag definitions[¶](#tag-definitions "Permalink to this headline")
------------------------------------------------------------------
+## Tag definitions
 
 Before we can create a tag we need to know how we will select which
 nodes it gets applied to. MAAS collects hardware information from the
@@ -33,20 +25,23 @@ speed of over 1GHz. In this case, the relevant XML node from the output
 will be labelled “display” and does have a property called clock, so it
 will look like this:
 
+```no-highlight
     //node[@id="display"]/clock > 1000000000
+```
 
 Now we have a definition, we can go ahead and create a tag.
 
-Creating a tag[¶](#creating-a-tag "Permalink to this headline")
----------------------------------------------------------------
+## Creating a tag
 
 Once we have sorted out what definition we will be using, creating the
-tag is easy using the `maas`{.docutils .literal} command. You will need
-to [*be logged in to the API first*](maascli.html#api-key):
+tag is easy using the `maas` command. You will need
+to [be logged in to the API first](maascli.html#api-key):
 
-    $ maas maas tags new name='gpu' \
+```bash
+maas maas tags new name='gpu' \
       comment='GPU with clock speed >1GHz for running CUDA type operations.' \
       definition='//node[@id="display"]/clock > 1000000000'
+```
 
 The comment is really for your benefit. It pays to keep the actual tag
 name short and to the point as you will be using it frequently in
@@ -57,14 +52,15 @@ is always a good idea!
 
 To check which nodes this tag applies to we can use the tag command:
 
-    $ maas maas tag nodes gpu
+```bash
+maas maas tag nodes gpu
+```
 
 The process of updating the tags does take some time - not a lot of
 time, but if nothing shows up straight away, try running the command
 again after a minute or so.
 
-Using the tag[¶](#using-the-tag "Permalink to this headline")
--------------------------------------------------------------
+## Using the tag
 
 You can use the tag in the web interface to discover applicable nodes,
 but the real significance of it is when using juju to deploy services.
@@ -74,15 +70,18 @@ service only gets deployed on hardware with the tag you have created.
 Example: To use the ‘gpu’ tag we created to run a service called ‘cuda’
 we would use:
 
-    $ juju deploy --constraints tags=gpu cuda
+```bash
+juju deploy --constraints tags=gpu cuda
+```
 
 You could list several tags if required, and mix in other juju
 constraints if needed:
 
-    $ juju deploy --constraints "mem=1024 tags=gpu,intel" cuda
+```bash
+juju deploy --constraints "mem=1024 tags=gpu,intel" cuda
+```
 
-Manually assigning tags[¶](#manually-assigning-tags "Permalink to this headline")
----------------------------------------------------------------------------------
+## Manually assigning tags
 
 MAAS supports the creation of arbitrary tags which don’t depend on XPath
 definitions (“nodes which make a lot of noise” perhaps). If a tag is
@@ -93,8 +92,10 @@ able to manually add and remove the tag from specific nodes.
 In this example we are assuming you are using the ‘maas’ profile and you
 want to create a tag called ‘my\_tag’:
 
-    $ maas maas tags new name='my_tag' comment='nodes which go ping'
-    $ maas maas tag update-nodes my_tag add="<system_id>"
+```bash
+maas maas tags new name='my_tag' comment='nodes which go ping'
+maas maas tag update-nodes my_tag add="<system_id>"
+```
 
 The first line creates a new tag but omits the definition, so no nodes
 are automatically added to it. The second line applies that tag to a
@@ -103,8 +104,9 @@ specific node referenced by its system id property.
 You can easily remove a tag from a particular node, or indeed add and
 remove them at the same time:
 
-    $ maas maas tag update-nodes my_tag add=<system_id_1> \
-      add=<system_id_2> add=<system_id_3> remove=<system_id_4>
+```bash
+maas maas tag update-nodes my_tag add=<system_id_1> \
+     add=<system_id_2> add=<system_id_3> remove=<system_id_4>
 
 As the rule is that tags without a definition are ignored when rebuilds
 are done, it is also possible to create a normal tag with a definition,
@@ -114,56 +116,15 @@ all the existing associations it has with nodes. This is particularly
 useful if you have some hardware which is conceptually similar but
 doesn’t easily fit within a single tag definition:
 
-    $ maas maas tag new name='my_tag' comment='nodes I like ' \
+```bash
+maas maas tag new name='my_tag' comment='nodes I like ' \
        definition='contains(//node[@id=network]/vendor, "Intel")'
-    $ maas maas tag update my_tag definition=''
-    $ maas mass tag update-nodes my_tag add=<system_id>
+maas maas tag update my_tag definition=''
+maas mass tag update-nodes my_tag add=<system_id>
+```
 
-Tip
-
-If you add and remove the same node in one operation, it ends up having
+!!! Note: If you add and remove the same node in one operation, it ends up having
 the tag removed (even if the tag was in place before the operation).
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
 
-Metal As A Service.
-
-\
- \
-
--   [Making use of Tags](#)
-    -   [Tag definitions](#tag-definitions)
-    -   [Creating a tag](#creating-a-tag)
-    -   [Using the tag](#using-the-tag)
-    -   [Manually assigning tags](#manually-assigning-tags)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Juju Quick
-        Start](juju-quick-start.html "previous chapter")
-    -   Next: [Physical Zones](physical-zones.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/tags.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](physical-zones.html "Physical Zones")
--   [previous](juju-quick-start.html "Juju Quick Start") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
