@@ -6,6 +6,12 @@ build:
 serve:
 	python -m SimpleHTTPServer
 
+publish:
+	tools/mdbuild.py --plain
+	cp -R resources _build/
+	cp -R media _build/
+	cp src/navigation.tpl _build/nav.html
+
 sysdeps:
 	sudo apt-get install python-html2text python-markdown python-pip git
 	sudo pip install mdx-anchors-away mdx-callouts mdx-foldouts
