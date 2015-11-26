@@ -43,6 +43,8 @@ def getargs():
     parser.add_argument(
         '--log', dest='debug', action='store_true', help="turn on logging")
     parser.add_argument(
+        '--plain', dest='plain', action='store_true', help="plain html (no template)")
+    parser.add_argument(
         '--quiet', dest='quiet', action='store_true', help="disable STDOUT")
     parser.add_argument(
         '--outpath', nargs=1, default='./_build', help="output path")
@@ -60,13 +62,17 @@ def main():
     global doc_nav
     global args
     args = getargs()
-    t = codecs.open(os.path.join(args.source, 'base.tpl'), encoding='utf-8')
-    doc_template = t.read()
-    t.close()
-    t = codecs.open(
+    if not args.plain:
+        t = codecs.open(os.path.join(args.source, 'base.tpl'), encoding='utf-8')
+        doc_template = t.read()
+        t.close()
+        t = codecs.open(
         os.path.join(args.source, 'navigation.tpl'), encoding='utf-8')
-    doc_nav = t.read()
-    t.close()
+        doc_nav = t.read()
+        t.close()
+    else:
+        doc_template='%%CONTENT%%'
+
     mdparser = markdown.Markdown(extensions=extlist)
     print extlist
     if (args.file):
