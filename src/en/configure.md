@@ -1,14 +1,9 @@
-### Navigation
+Title: Additional configuration
 
--   [next](cluster-configuration.html "Cluster Configuration")
--   [previous](install.html "Installing MAAS") |
--   [MAAS 1.8 documentation](index.html) »
+# Additional Configuration
 
-Additional Configuration[¶](#additional-configuration "Permalink to this headline")
-===================================================================================
 
-Manual DHCP configuration[¶](#manual-dhcp-configuration "Permalink to this headline")
--------------------------------------------------------------------------------------
+## Manual DHCP configuration
 
 DHCP is needed in order for MAAS to boot and control nodes. However,
 there are some circumstances under which you may not wish a cluster
@@ -17,11 +12,8 @@ instances, the existing DHCP server for the network will need its
 configuration altered to allow MAAS to enlist and control nodes
 automatically.
 
-Note
-
-If you don’t let MAAS manage DHCP, then MAAS will not be able to
-allocate its [*static IP
-addresses*](cluster-configuration.html#static-ip-address) to Nodes.
+!!! Note: If you don’t let MAAS manage DHCP, then MAAS will not be able to
+allocate its [*static IP addresses*](cluster-configuration.html#static-ip-address) to nodes.
 
 At the very least the “filename” option should be set to “pxelinux.0”.
 
@@ -29,6 +21,7 @@ How to configure this depends on what software you use as a DHCP server.
 If you are using the ISC DHCP server, for example, the configuration
 entry might look something like this:
 
+```no-highlight
     subnet 192.168.122.0 netmask 255.255.255.0 {
         filename "pxelinux.0";
         option subnet-mask 255.255.255.0;
@@ -36,6 +29,7 @@ entry might look something like this:
         option domain-name-servers 192.168.122.136;
         range dynamic-bootp 192.168.122.5 192.168.122.135;
     }
+```
 
 When doing this, leave the cluster controller’s interface in the
 “unmanaged” state.
@@ -48,13 +42,14 @@ node should use for downloading its installer image. If you want to
 support this situation, ensure that all of the nodes can reach all of
 the cluster controller’s network addresses.
 
-SSL Support[¶](#ssl-support "Permalink to this headline")
----------------------------------------------------------
+## SSL Support
 
 If you want secure access to your MAAS web UI/API, you need to do a few
 things. First, turn on SSL support in Apache:
 
-    $ sudo a2enmod ssl
+```bash
+sudo a2enmod ssl
+```
 
 Ensure that the Apache config file from
 `etc/maas/maas-http.conf`{.docutils .literal} is included in
@@ -64,15 +59,16 @@ DEFAULT\_MAAS\_URL so that it uses https instead of http.
 
 Now, restart Apache:
 
-    $ sudo service apache2 restart
+```bash
+sudo service apache2 restart
+```
 
 At this point you will be able to access the MAAS web server using https
 but the default SSL certificate is insecure. Please generate your own
 and then edit `/etc/apache2/conf.d/maas-http.conf`{.docutils .literal}
 to set the location of the certificate.
 
-Choosing a series to install[¶](#choosing-a-series-to-install "Permalink to this headline")
--------------------------------------------------------------------------------------------
+## Choosing a series to install
 
 You may have some specific reason to choose a particular version of
 Ubuntu to install on your nodes, perhaps based around package
@@ -81,35 +77,33 @@ availability, hardware support or some other reason.
 It is possible to choose a specific series from those available in a
 number of ways.
 
-### From the user interface[¶](#from-the-user-interface "Permalink to this headline")
-
+### From the user interface
 The web-based user interface makes it easy to select which Ubuntu series
 you wish to install on an individual node. When either adding a node
 manually, or on the node page when the node has been automatically
 discovered but before it is accepted, there is a drop down menu to
 select the version of Ubuntu you wish to install.
 
-![](_images/series.png)
+![](../images/series.png)
 
 The menu will always list all the currently available series according
 to which boot images are available.
 
-### Using the maas command[¶](#using-the-maas-command "Permalink to this headline")
+### Using the `maas` command
 
 It is also possible to select a series using the maas command. This can
 be done on a per node basis with:
 
-    $ maas <profile> node update <system_id> distro_series="<value>"
+```bash
+maas <profile> node update <system_id> distro_series="<value>"
+```
 
 Where the string contains one of the valid, available distro series
 (e.g. “trusty”) or is empty for the default value.
 
-Altering the Preseed file[¶](#altering-the-preseed-file "Permalink to this headline")
--------------------------------------------------------------------------------------
+### Altering the Preseed file
 
-Warning
-
-Do not try to alter the preseed files if you don’t have a good
+!!! Warning: Do not try to alter the preseed files if you don’t have a good
 understanding of what you are doing. Altering the installed version of
 Ubuntu can prevent MAAS from working as intended, and may have security
 and stability consequences.
@@ -123,8 +117,10 @@ it. However, in exceptional circumstances, you may wish to alter the
 pressed file to work around some issue. There are actually two preseed
 files, stored here:
 
+```no-highlight
     /etc/maas/preseeds/generic
     /etc/maas/preseeds/preseed-master
+```
 
 The generic file actually references the preseed-master file, and is
 used to set conditional parameters based on the type of series and
@@ -137,10 +133,12 @@ For the more usual sorts of things you may wish to change, you should
 edit the preseed-master file. For example, depending on your network you
 may wish to change the clock settings:
 
+```no-highlight
     # Local clock (set to UTC and use ntp)
     d-i     clock-setup/utc boolean true
     d-i     clock-setup/ntp boolean true
     d-i     clock-setup/ntp-server  string ntp.ubuntu.com
+```
 
 Having consistent clocks is very important to the working of your MAAS
 system overall. If your nodes however cannot freely access the Internet,
@@ -152,7 +150,8 @@ One thing you may wish to alter in the preseed file is the disk
 partitioning. This is a simple recipe that creates a swap partition and
 uses the rest of the disk for one large root filesystem:
 
-    partman-auto/text/atomic_scheme ::
+```no-highlight
+ partman-auto/text/atomic_scheme ::
 
     500 10000 1000000 ext3
             $primary{ }
@@ -166,11 +165,12 @@ uses the rest of the disk for one large root filesystem:
     64 512 300% linux-swap
             method{ swap }
             format{ } .
+```
 
-Here the root partition must be at least 500 mb, and has effectively no
-maximum size. The swap partition ranges from 64 MB to 3 times the
-system’s ram. Adding \$bootable{ } to make the partition bootable, and
-\$primary{ } marks it as the primary partition. The other specifiers
+Here the root partition must be at least 500MB, and has effectively no
+maximum size. The swap partition ranges from 64MB to 3 times the
+system’s RAM. Adding `\$bootable{ }` to make the partition bootable, and
+`\$primary{ }` marks it as the primary partition. The other specifiers
 used are:
 
 *method{ format }*
@@ -191,13 +191,10 @@ For more information on preseed options, you should refer to [the
 official Ubuntu
 documentation](https://help.ubuntu.com/12.04/installation-guide/i386/preseed-contents.html)
 
-Note
-
-Future versions of MAAS are likely to replace this type of automatic
+!!! Note: Future versions of MAAS are likely to replace this type of automatic
 installation with a different installer.
 
-Installing additional clusters[¶](#installing-additional-clusters "Permalink to this headline")
------------------------------------------------------------------------------------------------
+## Installing additional clusters
 
 In an environment comprising large numbers of nodes, it is likely that
 you will want to organise the nodes on a more distributed basis. The
@@ -205,18 +202,22 @@ standard install of the MAAS region controller includes a cluster
 controller, but it is possible to add additional cluster controllers to
 the configuration, as shown in the diagram below:
 
-![](_images/orientation_architecture-diagram.png)
+![](../images/orientation_architecture-diagram.png)
 
 Each cluster controller will need to run on a separate Ubuntu server.
 Installing and configuring the software is straightforward though:
 
-    $ sudo apt-get install maas-cluster-controller
+```bash 
+sudo apt-get install maas-cluster-controller
+```
 
 This meta-package will install all the basic requirements of the system.
 However, you may also wish or need to run DHCP and/or DNS services, in
 which case you should also specify these:
 
-    $ sudo apt-get install maas-cluster-controller maas-dhcp maas-dns
+```bash
+sudo apt-get install maas-cluster-controller maas-dhcp maas-dns
+```
 
 ### Configuring the cluster controller[¶](#configuring-the-cluster-controller "Permalink to this headline")
 
@@ -224,15 +225,19 @@ Once the packages are installed, the cluster controller needs to know
 where to look for the region controller. This is achieved using dpkg to
 configure the software:
 
-    $ dpkg-reconfigure maas-cluster-controller
+```bash
+dpkg-reconfigure maas-cluster-controller
+```
 
-![](_images/cluster-config.png)
+![](../images/cluster-config.png)
 
 The configuration script should then bring up a screen where you can
 enter the IP address of the region controller. Additionally, you will
 need to import the distro image files locally for commissioning:
 
-    $ maas maas node-groups import-boot-images
+```bash
+maas maas node-groups import-boot-images
+```
 
 …and optionally set up the DHCP and DNS for the cluster by either:
 
@@ -244,8 +249,7 @@ need to import the distro image files locally for commissioning:
 :   First [*logging in to the API*](maascli.html#api-key) and then
     [*following this procedure*](maascli.html#cli-dhcp)
 
-Client-side DNS configuration[¶](#client-side-dns-configuration "Permalink to this headline")
----------------------------------------------------------------------------------------------
+## Client-side DNS configuration
 
 When using a third party tool such as `juju`{.docutils .literal} it will
 need to be able to resolve the hostnames that the MAAS API returns to
@@ -254,61 +258,14 @@ point to MAAS’s DNS server. Generally speaking, this is a simple case of
 adding the following line to the `/etc/resolv.conf`{.docutils .literal}
 file on your client host:
 
-    nameserver <IP OF MAAS DNS HOST>
+```no-higlhight
+nameserver <IP OF MAAS DNS HOST>
+```
 
 replacing the \<IP OF MAAS DNS HOST\> with the actual IP address of the
 host running the MAAS DNS server.
 
-However, for hosts using the `resolvconf`{.docutils .literal} package,
+However, for hosts using the `resolvconf` package,
 please read its documentation for more information.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Additional Configuration](#)
-    -   [Manual DHCP configuration](#manual-dhcp-configuration)
-    -   [SSL Support](#ssl-support)
-    -   [Choosing a series to install](#choosing-a-series-to-install)
-        -   [From the user interface](#from-the-user-interface)
-        -   [Using the maas command](#using-the-maas-command)
-    -   [Altering the Preseed file](#altering-the-preseed-file)
-    -   [Installing additional
-        clusters](#installing-additional-clusters)
-        -   [Configuring the cluster
-            controller](#configuring-the-cluster-controller)
-    -   [Client-side DNS configuration](#client-side-dns-configuration)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Installing MAAS](install.html "previous chapter")
-    -   Next: [Cluster
-        Configuration](cluster-configuration.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/configure.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](cluster-configuration.html "Cluster Configuration")
--   [previous](install.html "Installing MAAS") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
