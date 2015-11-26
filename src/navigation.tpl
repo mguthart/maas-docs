@@ -33,6 +33,7 @@
             <ul class="no-margin">
               <li class=""><a href="maas-cli.html">MAAS CLI</a></li>
               <li class=""><a href="changelog.html">Release Notes</a></li>
+            </ul>
 </div>
 
 
