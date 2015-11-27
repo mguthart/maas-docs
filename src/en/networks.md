@@ -1,19 +1,10 @@
-### Navigation
 
--   [next](kernel-options.html "Setting kernel boot options")
--   [previous](sstreams-mirror.html "Local Mirroring of Boot Images") |
--   [MAAS 1.8 documentation](index.html) »
+# Networks
 
-Networks[¶](#networks "Permalink to this headline")
-===================================================
-
-Note
-
-This feature is available in MAAS versions 1.5 and above, starting with
+!!! Note: This feature is available in MAAS versions 1.5 and above, starting with
 revision 1961. If you’re writing a client application, you can check if
 MAAS supports this feature via the web API; see the documentation for
-the `networks-management`{.docutils .literal} capability
-[*here*](capabilities.html#cap-networks-management).
+the `networks-management capability [*here*](capabilities.html#cap-networks-management).
 
 A MAAS cluster controller can manage nodes on one or more networks. The
 cluster controller must have direct interfaces connected to these
@@ -27,12 +18,12 @@ be aware of them. If MAAS is aware of these networks, you can allocate
 nodes with specific network requirements. For example, when requesting a
 node, you could specify:
 
--   “Must be connected to the staging network” (for a test application).
--   “Needs to share a network with a given other node” (for fast
+ -   “Must be connected to the staging network” (for a test application).
+ -   “Needs to share a network with a given other node” (for fast
     communication).
--   “Should not be connected to the DMZ network” (for security).
--   “Can’t be on the Houston network” (for resilience).
--   “Has to be connected to a particular VLAN” (for software-defined
+ -   “Should not be connected to the DMZ network” (for security).
+ -   “Can’t be on the Houston network” (for resilience).
+ -   “Has to be connected to a particular VLAN” (for software-defined
     networking).
 
 To avoid confusion, MAAS imposes three rules on the networks you define.
@@ -40,14 +31,14 @@ Apart from these, MAAS places no restrictions on the number or nature of
 your networks, or on which nodes are connected to which networks. The
 rules are:
 
-1.  Each node must be on a network that is directly connected to an
+ -  Each node must be on a network that is directly connected to an
     interface on the node’s cluster controller. It is recommended that
     you let the cluster controller manage DHCP and DNS on this network.
     See [*Cluster Configuration*](cluster-configuration.html) for the
     details.
-2.  All networks must have different, non-overlapping IP ranges. Any
+ -  All networks must have different, non-overlapping IP ranges. Any
     possible IP address in the MAAS should belong to only one network.
-3.  If you use virtual networks, each must have a different VLAN tag in
+ -  If you use virtual networks, each must have a different VLAN tag in
     the range 0x001 to 0xffe (1 to 4094) inclusive. Non-virtual networks
     have no tag, and you can have as many of these as you want.
 
@@ -67,9 +58,7 @@ connected. Networks, on the other hand, only need to be defined in order
 to enable network placement constraints when allocating nodes, as in the
 examples above.
 
-Defining networks[¶](#defining-networks "Permalink to this headline")
----------------------------------------------------------------------
-
+## Defining networks
 There are two ways to define networks: through the web user interface,
 or through the API. The command-line interface acts a front-end for the
 API.
@@ -112,8 +101,7 @@ API*](api.html#region-controller-api). The values are the same as for
 the web UI. To do this, `POST`{.docutils .literal} your network
 definition to the *“networks”* endpoint.
 
-Connecting nodes to networks[¶](#connecting-nodes-to-networks "Permalink to this headline")
--------------------------------------------------------------------------------------------
+## Connecting nodes to networks
 
 In order for network placement constraints to take effect, you must also
 tell MAAS which nodes are connected to each network.
@@ -164,8 +152,7 @@ an error.
 Future versions of MAAS may detect and register some of the networks and
 their connections to nodes automatically.
 
-Placement constraints[¶](#placement-constraints "Permalink to this headline")
------------------------------------------------------------------------------
+## Placement constraints
 
 When you allocate a node through the API, or search for nodes in the web
 UI, you can specify two kinds of constraints for the node’s network
@@ -199,46 +186,4 @@ just expressed in different ways.
     `vlan:0xD`{.docutils .literal}, and `vlan:0X0d`{.docutils .literal}
     are all equivalent to `vlan:13`{.docutils .literal}.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Networks](#)
-    -   [Defining networks](#defining-networks)
-    -   [Connecting nodes to networks](#connecting-nodes-to-networks)
-    -   [Placement constraints](#placement-constraints)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Local Mirroring of Boot
-        Images](sstreams-mirror.html "previous chapter")
-    -   Next: [Setting kernel boot
-        options](kernel-options.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/networks.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](kernel-options.html "Setting kernel boot options")
--   [previous](sstreams-mirror.html "Local Mirroring of Boot Images") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
