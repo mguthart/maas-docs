@@ -1,15 +1,7 @@
-### Navigation
 
--   [next](api.html "MAAS API")
--   [previous](tags.html "Making use of Tags") |
--   [MAAS 1.8 documentation](index.html) »
+# Physical Zones
 
-Physical Zones[¶](#physical-zones "Permalink to this headline")
-===============================================================
-
-Note
-
-This feature is only available in MAAS versions 1.5 and above.
+!!! Note: This feature is only available in MAAS versions 1.5 and above.
 
 To help you maximise fault-tolerance and performance of the services you
 deploy, MAAS administrators can define *physical zones* (or just *zones*
@@ -28,8 +20,7 @@ Each node is in one and only one physical zone. Each MAAS instance ships
 with a default zone to which nodes are attached by default. If you do
 not need this feature, you can simply pretend it does not exist.
 
-Applications[¶](#applications "Permalink to this headline")
------------------------------------------------------------
+## Applications
 
 Since you run your own MAAS, its physical zones give you more
 flexibility than those of a third-party hosted cloud service. That means
@@ -37,7 +28,7 @@ that you get to design your zones and define what they mean. Below are
 some examples of how physical zones can help you get the most out of
 your MAAS.
 
-### Using Zones for Fault Tolerance[¶](#using-zones-for-fault-tolerance "Permalink to this headline")
+### Using Zones for Fault Tolerance
 
 If you are concerned about availability of services you deploy through
 MAAS, a physical zone could be on one power supply, or it could be an
@@ -55,7 +46,7 @@ For fault tolerance, machines that work together in order to provide one
 instance of a service should generally be allocated in the same zone.
 The entire service should have a backup instance in another zone.
 
-### Using Zones for Performance[¶](#using-zones-for-performance "Permalink to this headline")
+### Using Zones for Performance
 
 Even if fault tolerance is not an issue, you may still want to divide
 your nodes into groups that communicate efficiently through a
@@ -76,15 +67,15 @@ available on the internet. If your MAAS is spread out across multiple
 data centre locations, you may want the application to be deployed in
 the location with the best access to that service.
 
-### Using Zones for Power Management[¶](#using-zones-for-power-management "Permalink to this headline")
+### Using Zones for Power Management
 
 If you are concerned about power density and cooling, you can lay out
 your physical zones to match server racks. Instead of allocating
 machines that share a physical zone, you can spread out the load by
 ensuring that “hot” systems are in located different zones.
 
-Creating a Zone[¶](#creating-a-zone "Permalink to this headline")
------------------------------------------------------------------
+## Creating a Zone
+
 
 Only administrators can create and manage zones. To create a physical
 zone in the web user interface, log in as an administrator and browse to
@@ -92,14 +83,14 @@ the “Zones” section in the top bar. This will takes you to the zones
 listing page. At the bottom of the page is a button for creating a new
 zone:
 
-![](_images/add-zone.png)
+![](../media/add-zone.png)
 
-Or to do it in the [*region-controller
-API*](api.html#region-controller-api), POST your zone definition to the
+Or to do it in the 
+[region-controller API](api.html#region-controller-api), 
+POST your zone definition to the
 *“zones”* endpoint.
 
-Assigning Nodes to a Zone[¶](#assigning-nodes-to-a-zone "Permalink to this headline")
--------------------------------------------------------------------------------------
+## Assigning Nodes to a Zone
 
 Once you have created one or more physical zones, you can set nodes’
 zones from the nodes listing page in the UI. Select the nodes for which
@@ -115,8 +106,7 @@ ways are available in the API as well: edit an individual node through a
 multiple nodes at once by calling the `set_zone`{.docutils .literal}
 operation on the `nodes`{.docutils .literal} endpoint.
 
-Allocating a Node in a Zone[¶](#allocating-a-node-in-a-zone "Permalink to this headline")
------------------------------------------------------------------------------------------
+## Allocating a Node in a Zone
 
 To deploy in a particular zone, call the `acquire`{.docutils .literal}
 method in the [*region-controller API*](api.html#region-controller-api)
@@ -140,50 +130,4 @@ present in `not_in_zone`{.docutils .literal}, no node will ever match
 your request. Or if it’s not, then the `not_in_zone`{.docutils .literal}
 values will not affect the result of the call at all.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Physical Zones](#)
-    -   [Applications](#applications)
-        -   [Using Zones for Fault
-            Tolerance](#using-zones-for-fault-tolerance)
-        -   [Using Zones for Performance](#using-zones-for-performance)
-        -   [Using Zones for Power
-            Management](#using-zones-for-power-management)
-    -   [Creating a Zone](#creating-a-zone)
-    -   [Assigning Nodes to a Zone](#assigning-nodes-to-a-zone)
-    -   [Allocating a Node in a Zone](#allocating-a-node-in-a-zone)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Making use of Tags](tags.html "previous chapter")
-    -   Next: [MAAS API](api.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/physical-zones.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](api.html "MAAS API")
--   [previous](tags.html "Making use of Tags") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
