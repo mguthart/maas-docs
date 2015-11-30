@@ -1,18 +1,20 @@
+
 # Boot images import configuration
 
-The configuration for where a region downloads its images is defined by a set
-of "sources". Each "source" defines a Simplestreams repository location (`url`)
-from which images can be downloaded and a `keyring_filename` (or `keyring_data`)
-for validating index and image signatures from that location. For each source,
-you can define a series of filters (`selections`) specifying which images should
-be downloaded from that source.
+The configuration for where a region downloads its images is defined by
+a set of “sources”. Each “source” defines a Simplestreams repository
+location (`url`) from which images can be downloaded
+and a `keyring_filename` (or `keyring_data`) for validating index and image
+signatures from that location. For each source, you can define a series
+of filters (`selections`) specifying which images should be downloaded from
+that source.
 
-The following example use the MAAS CLI to list the boot sources and the boot
-source selections. Assuming the CLI `PROFILE` is the name of the profile under
-which you're logged in to the server:
+The following example use the MAAS CLI to list the boot sources and the
+boot source selections. Assuming the CLI `PROFILE`
+is the name of the profile under which you’re logged in to the server:
 
 ```no-highlight
-maas $PROFILE boot-sources read
+ maas $PROFILE boot-sources read
     [
         {
             "url": "http://maas.ubuntu.com/images/ephemeral-v2/releases/",
@@ -23,7 +25,7 @@ maas $PROFILE boot-sources read
         }
     ]
 
-maas $PROFILE boot-source-selections read 1
+ maas $PROFILE boot-source-selections read 1
     [
         {
             "labels": [
@@ -45,22 +47,22 @@ maas $PROFILE boot-source-selections read 1
 
 ## Restricting the images being downloaded
 
-Let's say you want to add a previous LTS release to images being downloaded.
-Starting from the configuration described above, you would need to:
+Let’s say you want to add a previous LTS release to images being
+downloaded. Starting from the configuration described above, you would
+need to:
 
--   Add the "Precise" selection (the selection '1' of the source '1'):
+-   Add the “Precise” selection (the selection ‘1’ of the source ‘1’):
 
-```no-highlight
-maas $PROFILE boot-source-selection create 1 os="ubuntu" release="precise" arches="amd64" subarches="*" labels="*"
+```bash
+ maas $PROFILE boot-source-selection create 1 os="ubuntu" release="precise" arches="amd64" subarches="*" labels="*"
 ```
 
 ## Downloading the images from a different source
 
+Let’s say you want to import the images from a different location. You
+would need to to change the source’s url and keyring:
 
-Let's say you want to import the images from a different location. You would
-need to to change the source's url and keyring:
-
-```bash
+```no-highlight
 maas $PROFILE boot-source update 1 url="http://custom.url" keyring_filename="" keyring_data@=./custom_keyring_file
     {
         "url": "http://custom.url/",
@@ -73,10 +75,11 @@ maas $PROFILE boot-source update 1 url="http://custom.url" keyring_filename="" k
 
 ## Adding a source
 
+
 You can also add a new source:
 
 ```no-highlight
-     maas $PROFILE boot-sources create url=http://my.url keyring_filename="" keyring_data@=./ custom_keyring_file
+ maas $PROFILE boot-sources create url=http://my.url keyring_filename="" keyring_data@=./ custom_keyring_file
     {
         "url": "http://my.url/",
         "keyring_data": "ZW1wdHkK",
@@ -85,11 +88,10 @@ You can also add a new source:
         "resource_uri": "<url omitted for readability>"
     }
 ```
-
-Inside that newly created source ('2') you can add selections:
+Inside that newly created source (‘2’) you can add selections:
 
 ```no-highlight
-     maas $PROFILE boot-source-selections create 2 os="ubuntu" release="trusty" arches="amd64" subarches="*" labels='*'
+ maas $PROFILE boot-source-selections create 2 os="ubuntu" release="trusty" arches="amd64" subarches="*" labels='*'
     {
         "labels": ["*"],
         "arches": ["amd64"],
@@ -102,11 +104,12 @@ Inside that newly created source ('2') you can add selections:
 
 ## Deleting a source
 
-Let's say you need to delete the newly added source.
+
+Let’s say you need to delete the newly added source.
 
 To delete the source:
 
 ```bash
-maas $PROFILE boot-source delete 2
+ maas $PROFILE boot-source delete 2
 ```
 

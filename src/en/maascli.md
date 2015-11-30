@@ -1,173 +1,192 @@
-Title: MAAS Command Line Interface
+
 # Command Line Interface
 
-As well as the web interface, many tasks can be performed by accessing the MAAS 
-API directly through the 'maas' command. This section details how to log in with
-this tool and perform some common operations.
+As well as the web interface, many tasks can be performed by accessing
+the MAAS API directly through the `maas` command. This section details how
+to log in with this tool and perform some common operations.
 
-##Logging in
+## Logging in
 
+Before the API will accept any commands from `maas`, you must first log
+in. To do this, you need an API key for your MAAS account. A key was
+generated for you as soon as your account was created, although you can
+still generate additional keys if you prefer.
 
-Before the API will accept any commands from maas, you must first log in. To do
-this, you need an API key for your MAAS account. A key was generated for you as
-soon as your account was created, although you can still generate additional
-keys if you prefer.
+The key can be found in the web user interface, or if you have root
+privileges on the region controller, retrieved from the command line.
 
-The key can be found in the web user interface, or if you have root privileges
-on the region controller, retrieved from the command line.
+To obtain the key from the web user interface, log in and click on your
+user name in the top right corner of the page, and select ‘Preferences’
+from the menu which appears.
 
-To obtain the key from the web user interface, log in and click on your user
-name in the top right corner of the page, and select 'Preferences' from the menu
-which appears.
-
-![image](media/maascli-prefs.png)
+![](_images/maascli-prefs.png)
 
 A new page will load...
 
-![image](media/maascli-key.png)
+![](_images/maascli-key.png)
 
-Your MAAS API keys appear at the top of the preferences form. It's easiest to
-just select and copy the key (it's quite long!) and then paste it into the
-command line.
+Your MAAS API keys appear at the top of the preferences form. It’s
+easiest to just select and copy the key (it’s quite long!) and then
+paste it into the command line.
 
-To obtain the key through the command line, run this command on the region
-controller (it requires root access):
+To obtain the key through the command line, run this command on the
+region controller (it requires root access):
 
 ```bash
-sudo maas-region-admin apikey <username>
+sudo maas-region-admin apikey --username=<my-username>
 ```
 
-(Substitute your own MAAS user name for "<username>").
+(Substitute your MAAS user name for <my-username>).
 
 Once you have your API key, log in with:
 
-```bash
+```
 maas login <profile-name> <hostname> <key>
 ```
 
-This command logs you in, and creates a "profile" with the profile name you have
-selected. The profile is an easy way of storing the server URL and your login
-credentials, and re-using them across command-line invocations. Think of the
-profile as a persistent session. You can have multiple profiles open at the same
-time, and so as part of the login command, you assign a unique name to the new
-profile. Later invocations of the maas command line will refer to the profile
-by this name.
+This command logs you in, and creates a “profile” with the profile name
+you have selected. The profile is an easy way of storing the server URL
+and your login credentials, and re-using them across command-line
+invocations. Think of the profile as a persistent session. You can have
+multiple profiles open at the same time, and so as part of the login
+command, you assign a unique name to the new profile. Later invocations
+of the maas command line will refer to the profile by this name.
 
 For example, you might log in with a command line like:
 
-```bash 
+```bash
 maas login my-maas http://10.98.0.13/MAAS/api/1.0
     AWSCRMzqMNy:jjk...5e1FenoP82Qm5te2
 ```
 
-This creates the profile 'my-maas' and registers it with the given key at the
-specified API endpoint URL.
+This creates the profile ‘my-maas’ and registers it with the given key
+at the specified API endpoint URL.
 
-If you omit the API key, the command will prompt you for it in the console. It
-is also possible to use a hyphen, '-' in place of the API key. In this case the
-command will read the API key from standard input, as a single line, ignoring
-whitespace. This mode of input can be useful if you want to read the API key
-from a file, or if you wish to avoid including the API key in a command line
-where it may be observed by other users on the system.
+If you omit the API key, the command will prompt you for it in the
+console. It is also possible to use a hyphen, ‘-‘ in place of the API
+key. In this case the command will read the API key from standard input,
+as a single line, ignoring whitespace. This mode of input can be useful
+if you want to read the API key from a file, or if you wish to avoid
+including the API key in a command line where it may be observed by
+other users on the system.
 
-Specifying an empty string instead of an API key will make the profile act as an
-anonymous user. Some calls in the API are accessible without logging in, but
-most of them are not.
+Specifying an empty string instead of an API key will make the profile
+act as an anonymous user. Some calls in the API are accessible without
+logging in, but most of them are not.
 
-## maas commands
- 
+## The `maas` commands
 
-The `maas` command exposes the whole API, so you can do anything you actually
-*can* do with MAAS using this command. Unsurprisingly, this leaves us with a
-vast number of options, but before we delve into detail on the specifics, here 
-is a sort of 'cheat-sheet' for common tasks you might want to do using `maas`.
+The `maas` command exposes the whole API, so you can
+do anything you actually *can* do with MAAS using this command.
+Unsurprisingly, this leaves us with a vast number of options, but before
+we delve into detail on the specifics, here is a sort of ‘cheat-sheet’
+for common tasks you might want to do using `maas`{.docutils .literal}.
 
-  -   Configure DHCP and DNS services \<cli-dhcp\>
-  -   Commission all enlisted nodes \<cli-commission\>
-  -   Setting IPMI power parameters for a node \<cli-power\>
+  -   [*Configure DHCP and DNS services*](#cli-dhcp)
+  -   [*Commission all enlisted nodes*](#cli-commission)
+  -   [*Setting IPMI power parameters for a
+      node*](man/maas.8.html#cli-power)
 
-The main `maas` commands are:
+The main maas commands are:
 
-list
+### `list`
 
-> lists the details [name url auth-key] of all the currently logged-in profiles.
+Lists the details [name url auth-key] of all the currently logged-in
+profiles.
 
-login \<profile\> \<url\> \<key\>
+###`login <profile> <url> <key>`
 
-> Logs in to the MAAS controller API at the given URL, using the key provided and associates this connection with the given profile name.
+Logs in to the MAAS controller API at the given URL, using the key
+provided and associates this connection with the given profile name.
 
-logout \<profile\>
+### `logout <profile>`
 
-> Logs out from the given profile, flushing the stored credentials.
+Logs out from the given profile, flushing the stored credentials.
 
-refresh
+### `refresh`
 
-> Refreshes the API descriptions of all the current logged in profiles. This may become necessary for example when upgrading the maas packages to ensure the command-line options match with the API.
+> Refreshes the API descriptions of all the current logged in profiles.
+> This may become necessary for example when upgrading the maas packages
+> to ensure the command-line options match with the API.
 
-\<profile\> [command] [options] ...
+### `<profile> [command] [options] ...`
 
-> Using the given profile name instructs `maas` to direct the subsequent commands and options to the relevant MAAS, which for the current API are detailed below...
+> Using the given profile name instructs `maas`{.docutils .literal} to
+> direct the subsequent commands and options to the relevant MAAS, which
+> for the current API are detailed below...
 
 ### account
 
-This command is used for creating and destroying the MAAS authorisation tokens associated with a profile.
+This command is used for creating and destroying the MAAS authorisation
+tokens associated with a profile.
 
-Usage: maas *\<profile\>* account [-d --debug] [-h --help] create-authorisation-token | delete-authorisation-token [token\_key=
-*\<value\>*]
+Usage: maas *\<profile\>* account [-d –debug] [-h –help]
+create-authorisation-token | delete-authorisation-token
+[token\_key=*\<value\>*]
 
--d, --debug
+#### `-d, --debug`
 
 > Displays debug information listing the API responses.
 
--h, --help
+#### `-h, --help`
 
 > Display usage information.
 
--k, --insecure
+#### `-k, --insecure`
 
 > Disables the SSL certificate check.
 
-create-authorisation-token
+#### `create-authorisation-token`
 
-> Creates a new MAAS authorisation token for the current profile which can be used to authenticate connections to the API.
+> Creates a new MAAS authorisation token for the current profile which
+> can be used to authenticate connections to the API.
 
-delete-authorisation-token token\_key=\<value\>
+`delete-authorisation-token token_key=<value>`
 
 > Removes the given key from the list of authorisation tokens.
 
 ### node
 
-API calls which operate on individual nodes. With these commands, the node is always identified by its "system\_id" property - a unique tag allocated at the time of enlistment. To discover the value of the system\_id, you can use the `maas <profile> nodes list` command.
+API calls which operate on individual nodes. With these commands, the
+node is always identified by its “system\_id” property - a unique tag
+allocated at the time of enlistment. To discover the value of the
+system\_id, you can use the `maas <profile> nodes list`{.docutils
+.literal} command.
 
-USAGE: maas \<profile\> node [-h] release | start | stop | delete | read | update \<system\_id\>
+USAGE: maas \<profile\> node [-h] release | start | stop | delete | read
+| update \<system\_id\>
 
--h, --help
+`-h, --help`
 
 > Display usage information.
 
-release \<system\_id\>
+`release <system_id>`
 
 > Releases the node given by *\<system\_id\>*
 
-start \<system\_id\>
+`start <system_id>`
 
-> Powers up the node identified by *\<system\_id\>* (where MAAS has information for power management for this node).
+> Powers up the node identified by *\<system\_id\>* (where MAAS has
+> information for power management for this node).
 
-stop \<system\_id\>
+`stop <system_id>`
 
-> Powers off the node identified by *\<system\_id\>* (where MAAS has information for power management for this node).
+> Powers off the node identified by *\<system\_id\>* (where MAAS has
+> information for power management for this node).
 
-delete \<system\_id\>
+`delete <system_id>`
 
 > Removes the given node from the MAAS database.
 
-read \<system\_id\>
+`read <system_id>`
 
-> Returns all the current known information about the node specified by *\<system\_id\>*
+> Returns all the current known information about the node specified by
+> *\<system\_id\>*
 
-update \<system\_id\> [parameters...]
+`update <system_id> [parameters...]`
 
-> Used to change or set specific values for the node. The valid parameters are listed below:
+> Used to change or set specific values for the node. The valid
+> parameters are listed below:
 >
 >     hostname=<value>
 >          The new hostname for this node.
@@ -199,41 +218,49 @@ Example: Setting the power parameters for an ipmi enabled node:
       power_parameters_power_user=root \
       power_parameters_power_pass=ubuntu;
 
-### nodes
+### nodes[¶](#nodes "Permalink to this headline")
 
-Usage: maas \<profile\> nodes [-h] is-registered | list-allocated | acquire | list | accept | accept-all | new | check-commissioning
+Usage: maas \<profile\> nodes [-h] is-registered | list-allocated |
+acquire | list | accept | accept-all | new | check-commissioning
 
--h, --help
+`-h, --help`
 
 > Display usage information.
 
-accept \<system\_id\>
+`accept <system_id>`
 
 > Accepts the node referenced by \<system\_id\>.
 
-accept-all
+`accept-all`
 
 > Accepts all currently discovered but not previously accepted nodes.
 
-acquire
+`acquire`
 
-> Allocates a node to the profile used to issue the command. Any ready node may be allocated.
+> Allocates a node to the profile used to issue the command. Any ready
+> node may be allocated.
 
-is-registered mac\_address=\<address\>
+`is-registered mac_address=<address>`
 
-> Checks to see whether the specified MAC address is registered to a node.
+> Checks to see whether the specified MAC address is registered to a
+> node.
 
-list
+`list`
 
-> Returns a JSON formatted object listing all the currently known nodes, their system\_id, status and other details.
+> Returns a JSON formatted object listing all the currently known nodes,
+> their system\_id, status and other details.
 
-list-allocated
+`list-allocated`
 
-> Returns a JSON formatted object listing all the currently allocated nodes, their system\_id, status and other details.
+> Returns a JSON formatted object listing all the currently allocated
+> nodes, their system\_id, status and other details.
 
-new architecture=\<value\> mac\_addresses=\<value\> [parameters]
+`new architecture=<value> mac_addresses=<value> [parameters]`{.samp
+.docutils .literal}
 
-> Creates a new node entry given the provided key=value information for the node. A minimum of the MAC address and architecture must be provided. Other parameters may also be supplied:
+> Creates a new node entry given the provided key=value information for
+> the node. A minimum of the MAC address and architecture must be
+> provided. Other parameters may also be supplied:
 >
 >     architecture="<value>" - The architecture of the node, must be
 >     one of the recognised architecture strings (e.g. "i386/generic")
@@ -244,9 +271,11 @@ new architecture=\<value\> mac\_addresses=\<value\> [parameters]
 >     power_type="<value>" - the power type of
 >     the node (e.g. virsh, ipmi)
 
-check-commissioning
+`check-commissioning`
 
-> Displays current status of nodes in the commissioning phase. Any that have not returned before the system timeout value are listed as "failed".
+> Displays current status of nodes in the commissioning phase. Any that
+> have not returned before the system timeout value are listed as
+> “failed”.
 
 Examples: Accept and commission all discovered nodes:
 
@@ -260,56 +289,66 @@ Filter the list using specific key/value pairs:
 
     $ maas maas nodes list architecture="i386/generic"
 
-### node-groups
+### node-groups[¶](#node-groups "Permalink to this headline")
 
-Usage: maas \<profile\> node-groups [-d --debug] [-h --help] [-k --insecure] register | list | accept | reject
+Usage: maas \<profile\> node-groups [-d –debug] [-h –help] [-k
+–insecure] register | list | accept | reject
 
--d, --debug
+`-d, --debug`
 
 > Displays debug information listing the API responses.
 
--h, --help
+`-h, --help`
 
 > Display usage information.
 
--k, --insecure
+`-k, --insecure`
 
 > Disables the SSL certificate check.
 
-register uuid=\<value\> name=\<value\> interfaces=\<json\_string\>
+`register uuid=<value> name=<value> interfaces=<json_string>`{.samp
+.docutils .literal}
 
-> Registers a new node group with the given name and uuid. The interfaces parameter must be supplied in the form of a JSON string comprising the key/value data for the interface to be used, for example: interface='["ip":"192.168.21.5","interface":"eth1",
-> "subnet\_mask":"255.255.255.0","broadcast\_ip":"192.168.21.255",
-> "router\_ip":"192.168.21.1", "ip\_range\_low":"192.168.21.10",
-> "ip\_range\_high":"192.168.21.50"}]'
+> Registers a new node group with the given name and uuid. The
+> interfaces parameter must be supplied in the form of a JSON string
+> comprising the key/value data for the interface to be used, for
+> example: interface=’[“ip”:”192.168.21.5”,”interface”:”eth1”,
+> “subnet\_mask”:”255.255.255.0”,”broadcast\_ip”:”192.168.21.255”,
+> “router\_ip”:”192.168.21.1”, “ip\_range\_low”:”192.168.21.10”,
+> “ip\_range\_high”:”192.168.21.50”}]’
 
-list
+`list`
 
 > Returns a JSON list of all currently defined node groups.
 
-accept \<uuid\>
+`accept <uuid>`
 
-> Accepts a node-group or number of nodegroups indicated by the supplied UUID
+> Accepts a node-group or number of nodegroups indicated by the supplied
+> UUID
 
-reject \<uuid\>
+`reject <uuid>`
 
-> Rejects a node-group or number of nodegroups indicated by the supplied UUID
+> Rejects a node-group or number of nodegroups indicated by the supplied
+> UUID
 
-### node-group-interface
+### node-group-interface[¶](#node-group-interface "Permalink to this headline")
 
-For managing the interfaces. See also node-group-interfaces
+For managing the interfaces. See also
+[*node-group-interfaces*](#node-group-interfaces)
 
-Usage: maas *\<profile\>* node-group-interfaces [-d --debug] [-h --help] [-k --insecure] read | update | delete [parameters...]
+Usage: maas *\<profile\>* node-group-interfaces [-d –debug] [-h –help]
+[-k –insecure] read | update | delete [parameters...]
 
 ..program:: maas node-group-interface
 
-read \<uuid\> \<interface\>
+`read <uuid> <interface>`
 
 > Returns the current settings for the given UUID and interface
 
-update [parameters]
+`update [parameters]`
 
-> Changes the settings for the interface according to the given parameters:
+> Changes the settings for the interface according to the given
+> parameters:
 >
 >     management=  0 | 1 | 2
 >          The service to be managed on the interface ( 0= none, 1=DHCP, 2=DHCP
@@ -332,17 +371,20 @@ update [parameters]
 >     ip_range_high=<value>
 >          The highest value of IP address to allocate via DHCP
 
-delete \<uuid\> \<interface\>
+`delete <uuid> <interface>`
 
 > Removes the entry for the given UUID and interface.
 
 Example: Configuring DHCP and DNS.
 
-To enable MAAS to manage DHCP and DNS, it needs to be supplied with the relevant interface information. To do this we need to first determine the UUID of the node group affected:
+To enable MAAS to manage DHCP and DNS, it needs to be supplied with the
+relevant interface information. To do this we need to first determine
+the UUID of the node group affected:
 
     $ uuid=$(maas <profile> node-groups list | grep uuid | cut -d\" -f4)
 
-Once we have the UUID we can use this to update the node-group-interface for that nodegroup, and pass it the relevant interface details:
+Once we have the UUID we can use this to update the node-group-interface
+for that nodegroup, and pass it the relevant interface details:
 
     $ maas <profile> node-group-interface update $uuid eth0 \
             ip_range_high=192.168.123.200    \
@@ -351,33 +393,41 @@ Once we have the UUID we can use this to update the node-group-interface for tha
             broadcast_ip=192.168.123.255     \
             router_ip=192.168.123.1          \
 
-Replacing the example values with those required for this network. The only non-obvious parameter is 'management' which takes the values 0 (no management), 1 (manage DHCP) and 2 (manage DHCP and DNS).
+Replacing the example values with those required for this network. The
+only non-obvious parameter is ‘management’ which takes the values 0 (no
+management), 1 (manage DHCP) and 2 (manage DHCP and DNS).
 
-### node-group-interfaces
+### node-group-interfaces[¶](#node-group-interfaces "Permalink to this headline")
 
-The node-group-interfaces commands are used for configuring the management of DHCP and DNS services where these are managed by MAAS.
+The node-group-interfaces commands are used for configuring the
+management of DHCP and DNS services where these are managed by MAAS.
 
-Usage: maas *\<profile\>* node-group-interfaces [-d --debug] [-h --help] [-k --insecure] list | new [parameters...]
+Usage: maas *\<profile\>* node-group-interfaces [-d –debug] [-h –help]
+[-k –insecure] list | new [parameters...]
 
--d, --debug
+`-d, --debug`
 
 > Displays debug information listing the API responses.
 
--h, --help
+`-h, --help`
 
 > Display usage information.
 
--k, --insecure
+`-k, --insecure`
 
 > Disables the SSL certificate check.
 
-list \<label\>
+`list <label>`
 
-> Lists the current stored configurations for the given identifier \<label\> in a key:value format which should be easy to decipher.
+> Lists the current stored configurations for the given identifier
+> \<label\> in a key:value format which should be easy to decipher.
 
-new \<label\> ip=\<value\> interface=\<if\_device\> [parameters...]
+`new <label> ip=<value> interface=<if_device> [parameters...]`{.samp
+.docutils .literal}
 
-> Creates a new interface group. The required parameters are the IP address and the network interface this applies to (e.g. eth0). In order to do anything useful, further parameters are required:
+> Creates a new interface group. The required parameters are the IP
+> address and the network interface this applies to (e.g. eth0). In
+> order to do anything useful, further parameters are required:
 >
 >     management= 0 | 1 | 2
 >          The service to be managed on the interface
@@ -410,65 +460,84 @@ new \<label\> ip=\<value\> interface=\<if\_device\> [parameters...]
 >          Highest IP number of the range for IPs given to allocated
 >          nodes and user requests for IPs.
 
-### tag
+### tag[¶](#tag "Permalink to this headline")
 
-The tag command is used to manually alter tags, tagged nodes or rebuild the automatic tags.
+The tag command is used to manually alter tags, tagged nodes or rebuild
+the automatic tags.
 
-> For more information on how to use them effectively, please see deploy-tags
+> For more information on how to use them effectively, please see
+> [*Making use of Tags*](tags.html#deploy-tags)
 
-Usage: maas \<profile\> tag read | update-nodes | rebuild | update | nodes | delete
+Usage: maas \<profile\> tag read | update-nodes | rebuild | update |
+nodes | delete
 
-read \<tag\_name\>
+`read <tag_name>`
 
 > Returns information on the tag specified by \<name\>
 
-update-nodes \<tag\_name\> [add=\<system\_id\>] [remove=\<system\_id\>]
-[nodegroup=\<system\_id\>]
+`update-nodes <tag_name> [add=<system_id>] [remove=<system_id>] [nodegroup=<system_id>]`{.samp
+.docutils .literal}
 
-> Applies or removes the given tag from a list of nodes specified by either or both of add="\<system\_id\>" and remove="\<system\_id\>". The nodegroup parameter, which restricts the operations to a particular nodegroup, is optional, but only the superuser can execute this command without it.
+> Applies or removes the given tag from a list of nodes specified by
+> either or both of add=”\<system\_id\>” and remove=”\<system\_id\>”.
+> The nodegroup parameter, which restricts the operations to a
+> particular nodegroup, is optional, but only the superuser can execute
+> this command without it.
 
-rebuild
+`rebuild`
 
 > Triggers a rebuild of the tag to node mapping.
 
-update \<tag\_name\> [name=\<value\>] | [comment=\<value\>]|
-[definition=\<value\>]
+`update <tag_name> [name=<value>] | [comment=<value>]| [definition=<value>]`{.samp
+.docutils .literal}
 
-> Updates the tag identified by tag\_name. Any or all of name,comment and definition may be supplied as parameters. If no parameters are supplied, this command returns the current values.
+> Updates the tag identified by tag\_name. Any or all of name,comment
+> and definition may be supplied as parameters. If no parameters are
+> supplied, this command returns the current values.
 
-nodes \<tag\_name\>
+`nodes <tag_name>`
 
 > Returns a list of nodes which are associated with the given tag.
 
-delete \<tag\_name\>
+`delete <tag_name>`
 
 > Deletes the given tag.
 
-### tags
+### tags[¶](#tags "Permalink to this headline")
 
-Tags are a really useful way of identifying nodes with particular characteristics.
+Tags are a really useful way of identifying nodes with particular
+characteristics.
 
-Usage: maas \<profile\> tag [-d --debug] [-h --help] [-k --insecure] list | create
+For more information on how to use them effectively, please see [Making
+use of Tags](tags.html#deploy-tags)
 
--d, --debug
+Usage: maas \<profile\> tag [-d –debug] [-h –help] [-k –insecure] list |
+create
+
+`-d, --debug`
 
 > Displays debug information listing the API responses.
 
--h, --help
+`-h, --help`
 
 > Display usage information.
 
--k, --insecure
+`-k, --insecure`
 
 > Disables the SSL certificate check.
 
-list
+`list`
 
-> Returns a JSON object listing all the current tags known by the MAAS server
+> Returns a JSON object listing all the current tags known by the MAAS
+> server
 
-create name=\<value\> definition=\<value\> [comment=\<value\>]
+`create name=<value> definition=<value> [comment=<value>]`
 
-> Creates a new tag with the given name and definition. A comment is optional. Names must be unique, obviously - an error will be returned if the given name already exists. The definition is in the form of an XPath expression which parses the XML returned by running `lshw` on the node.
+> Creates a new tag with the given name and definition. A comment is
+> optional. Names must be unique, obviously - an error will be returned
+> if the given name already exists. The definition is in the form of an
+> XPath expression which parses the XML returned by running
+> `lshw` on the node.
 
 Example: Adding a tag to all nodes which have an Intel GPU:
 
@@ -476,7 +545,10 @@ Example: Adding a tag to all nodes which have an Intel GPU:
         comment='Machines which have an Intel display driver' \
         definition='contains(//node[@id="display"]/vendor, "Intel")'
 
-### unused commands
+### unused commands[¶](#unused-commands "Permalink to this headline")
 
-Because the `maas` command exposes all of the API, it also lists some command options which are not really intended for end users, such as the "file" and "boot-images" options.
+Because the `maas` command exposes all of the API,
+it also lists some command options which are not really intended for end
+users, such as the “file” and “boot-images” options.
+
 
