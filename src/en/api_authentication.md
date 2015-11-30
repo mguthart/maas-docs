@@ -1,13 +1,7 @@
-### Navigation
 
--   [next](maascli.html "Command Line Interface")
--   [previous](api.html "MAAS API") |
--   [MAAS 1.8 documentation](index.html) »
+# API authentication
 
-API authentication[¶](#api-authentication "Permalink to this headline")
-=======================================================================
-
-MAAS’s API uses [OAuth](http://en.wikipedia.org/wiki/OAuth) as its
+The MAAS API uses [OAuth](http://en.wikipedia.org/wiki/OAuth) as its
 authentication mechanism. There isn’t a third party involved (as in
 3-legged OAuth) and so the process used is what’s commonly referred to
 as 0-legged OAuth: the consumer accesses protected resources by
@@ -16,16 +10,17 @@ submitting OAuth signed requests.
 Note that some API endpoints support unauthenticated requests (i.e.
 anonymous access). See the [*API documentation*](api.html) for details.
 
-Examples[¶](#examples "Permalink to this headline")
-===================================================
+## API usage examples
+
 
 Here are two examples on how to perform an authenticated GET request to
-retrieve the list of nodes. The \<key\>, \<secret\>, \<consumer\_key\>
+retrieve the list of nodes. The `<key>`, `<secret>`, `<consumer_key>`
 tokens are the three elements that compose the API key (API key =
-‘\<consumer\_key\>:\<key\>:\<secret\>’).
+`<consumer_key>:<key>:<secret>`).
 
-Python[¶](#python "Permalink to this headline")
------------------------------------------------
+### Python
+
+```python
 
     import oauth.oauth as oauth
     import httplib2
@@ -52,9 +47,13 @@ Python[¶](#python "Permalink to this headline")
     response = perform_API_request(
         'http://server/MAAS/api/1.0', '/nodes/?op=list', 'GET', '<key>', '<secret>',
         '<consumer_key>')
+```
 
-Ruby[¶](#ruby "Permalink to this headline")
--------------------------------------------
+
+
+### Ruby
+
+```ruby
 
     require 'oauth'
     require 'oauth/signature/plaintext'
@@ -73,44 +72,4 @@ Ruby[¶](#ruby "Permalink to this headline")
          "http://server/MAAS/api/1.0", "/nodes/?op=list", "<key>", "<secret>",
          "consumer_key>")
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
-
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [API authentication](#)
--   [Examples](#examples)
-    -   [Python](#python)
-    -   [Ruby](#ruby)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [MAAS API](api.html "previous chapter")
-    -   Next: [Command Line Interface](maascli.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/api_authentication.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](maascli.html "Command Line Interface")
--   [previous](api.html "MAAS API") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
+```
