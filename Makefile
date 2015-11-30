@@ -6,12 +6,14 @@ build:
 serve:
 	python -m SimpleHTTPServer
 
-publish:
-	if [ -d "_build" ];then rm -rf _build; fi
+plain:
+	@if [ -d "_build" ];then rm -rf _build; fi
 	tools/mdbuild.py --plain
-	cp -R resources _build/
-	cp -R media _build/
-	cp src/navigation.tpl _build/nav.html
+	@cp -R resources _build/
+	@cp -R media _build/
+	@cp src/navigation.tpl _build/nav.html
+
+publish: plain      
 	cd _build ; git clone https://github.com/maas-docs/maas-docs
 	cd _build/maas-docs; git checkout www-1.8 && git rm -rf * && \
 cp -R ../en . && cp -R ../media . && cp ../nav.html . && \
@@ -27,4 +29,4 @@ multi:
 clean:
 	if [ -d "_build" ];then rm -rf _build; fi
 
-.PHONY: build serve sysdeps multi clean
+.PHONY: build serve sysdeps multi clean plain publish
