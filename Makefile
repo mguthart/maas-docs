@@ -29,4 +29,4 @@ multi:
 clean:
 	if [ -d "_build" ];then rm -rf _build; fi
 
-.PHONY: build serve sysdeps multi clean
+.PHONY: build serve sysdeps multi clean plain publish
