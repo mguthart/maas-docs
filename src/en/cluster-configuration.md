@@ -1,11 +1,4 @@
-### Navigation
-
--   [next](static-ips.html "Static IPs")
--   [previous](configure.html "Additional Configuration") |
--   [MAAS 1.8 documentation](index.html) »
-
-Cluster Configuration[¶](#cluster-configuration "Permalink to this headline")
-=============================================================================
+# Cluster Configuration
 
 Before any of MAAS’s features can be used for the first time, you must
 have a cluster controller and configure it to manage at least one
@@ -23,8 +16,7 @@ Make sure you understand the implications of running a DHCP server
 before doing this. If MAAS detects any DHCP servers already running on
 these networks, it will show them on the cluster’s configuration page.
 
-Network requirements[¶](#network-requirements "Permalink to this headline")
----------------------------------------------------------------------------
+## Network requirements
 
 The cluster controller manages a network of nodes through one of its
 interfaces as defined in MAAS. Cluster interfaces are discovered
@@ -45,8 +37,7 @@ interface. This is for two reasons:
     implies that the nodes and the cluster controller must be on the
     same physical subnet.
 
-Cluster acceptance[¶](#cluster-acceptance "Permalink to this headline")
------------------------------------------------------------------------
+## Cluster acceptance
 
 If you install your first cluster controller on the same system as the
 region controller, as is the case when you install the full “maas”
@@ -58,12 +49,12 @@ accept them into the MAAS.
 To accept a cluster controller, visit the “pending clusters” section of
 the Clusters page:
 
-![](_images/cluster-accept.png)
+![](../media/cluster-accept.png)
 
 You can either click on “Accept all” or click on the edit icon to edit
 the cluster. After clicking on the edit icon, you will see this page:
 
-![](_images/cluster-edit.png)
+![](../media/cluster-edit.png)
 
 Here you can change the cluster’s name as it appears in the UI, its DNS
 zone, and its status. Accepting the cluster changes its status from
@@ -74,8 +65,8 @@ more of its network interfaces to be managed by MAAS. This will enable
 the cluster controller to manage nodes attached to those networks. The
 next section explains how to do this and what choices are to be made.
 
-Cluster interface management[¶](#cluster-interface-management "Permalink to this headline")
--------------------------------------------------------------------------------------------
+## Cluster interface management
+
 
 MAAS automatically recognises the network interfaces on each cluster
 controller. Some (though not necessarily all) of these will be connected
@@ -94,7 +85,7 @@ network on interface `eth0`{.docutils .literal}. Click on the edit icon
 for the cluster interface on network interface `eth0`{.docutils
 .literal}, which takes us to this page:
 
-![](_images/cluster-interface-edit.png)
+![](../media/cluster-interface-edit.png)
 
 Here you can select to what extent you want the cluster controller to
 manage the network:
@@ -115,7 +106,7 @@ manage nodes but don’t want the cluster controller to serve DHCP, you
 may be able to get by without it. This is explained in [*Manual DHCP
 configuration*](configure.html#manual-dhcp).
 
-### Static vs Dynamic IP Addresses[¶](#static-vs-dynamic-ip-addresses "Permalink to this headline")
+### Static vs Dynamic IP Addresses
 
 On the cluster interface edit page, there are fields to enter both a
 dynamic and a static range of IP addresses. It is mandatory to enter the
@@ -141,56 +132,11 @@ allocating the reserved IP to any Nodes or other devices, which allows
 users to assign it freely to their own hosts/devices on the same
 network, such as LXC containers.
 
-Multiple networks[¶](#multiple-networks "Permalink to this headline")
----------------------------------------------------------------------
+## Multiple networks
 
 A single cluster controller can manage more than one network, each from
 a different cluster interface. This may help you scale your cluster to
 larger numbers of nodes, or it may be a requirement of your network
 architecture.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
-
-Metal As A Service.
-
-\
- \
-
--   [Cluster Configuration](#)
-    -   [Network requirements](#network-requirements)
-    -   [Cluster acceptance](#cluster-acceptance)
-    -   [Cluster interface management](#cluster-interface-management)
-        -   [Static vs Dynamic IP
-            Addresses](#static-vs-dynamic-ip-addresses)
-    -   [Multiple networks](#multiple-networks)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Additional
-        Configuration](configure.html "previous chapter")
-    -   Next: [Static IPs](static-ips.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/cluster-configuration.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](static-ips.html "Static IPs")
--   [previous](configure.html "Additional Configuration") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.

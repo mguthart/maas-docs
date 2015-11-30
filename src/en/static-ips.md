@@ -57,18 +57,3 @@ not to be in use by MAAS itself.
 See the full [*MAAS API*](api.html) documentation for precise technical
 details.
 
-
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](ipv6.html "Managing IPv6 Networks")
--   [previous](cluster-configuration.html "Cluster Configuration") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.

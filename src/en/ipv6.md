@@ -1,19 +1,10 @@
-### Navigation
+# Managing IPv6 Networks
 
--   [next](bootsources.html "Boot images import configuration")
--   [previous](static-ips.html "Static IPs") |
--   [MAAS 1.8 documentation](index.html) »
-
-Managing IPv6 Networks[¶](#managing-ipv6-networks "Permalink to this headline")
-===============================================================================
-
-Note
-
-This feature is available in MAAS versions 1.7 and above, starting with
-lp:maas revision 2992. If you’re writing a client application that makes
+!!! Note: This feature is available in MAAS versions 1.7 and above, starting 
+with `lp:maas` revision 2992. If you’re writing a client application that makes
 use of this feature, you can query the region-server API for the
-`ipv6-deployment-ubuntu`{.docutils .literal}
-[*capability*](capabilities.html#cap-ipv6-deployment-ubuntu).
+`ipv6-deployment-ubuntu`
+[capability](capabilities.html#cap-ipv6-deployment-ubuntu).
 
 MAAS has limited IPv6 support for networking nodes. It works much like
 IPv4 support, but with a number of limitations:
@@ -34,17 +25,18 @@ IPv4 support, but with a number of limitations:
 The web user interface and REST API can be accessed in the same way on
 both IPv4 and IPv6. To use an IPv6 address as the hostname in a URL, in
 your browser or elsewhere, surround it with square brackets. For
-example, on the local machine (`::1`{.docutils .literal}, the IPv6
-equivalent of `localhost`{.docutils .literal}) you might request:
+example, on the local machine (`::1`, the IPv6
+equivalent of `localhost`) you might request:
 
+```no-highlight
     http://[::1]/MAAS/
+```
 
 If your MAAS server has a DNS hostname that resolves to both IPv4 and
 IPv6 addresses, your browser may already be accessing the UI through
 IPv6 without you noticing.
 
-Enabling IPv6[¶](#enabling-ipv6 "Permalink to this headline")
--------------------------------------------------------------
+## Enabling IPv6
 
 You enable IPv6 networking in the same way that you enable IPv4
 networking: configure a separate cluster interface for your IPv6 subnet,
@@ -61,7 +53,7 @@ defines a different subnet, with IPv6 addressing. A node that’s
 connected to the IPv4 subnet will also be connected to the IPv6 subnet
 on the same network segment.
 
-### Configuring your IPv6 subnet[¶](#configuring-your-ipv6-subnet "Permalink to this headline")
+### Configuring your IPv6 subnet
 
 When you configure your IPv6 cluster interface, be sure to define a
 static IP address range. Deployed nodes on the subnet will get static
@@ -82,7 +74,7 @@ managed by MAAS, but it is not needed for the nodes themselves. MAAS
 will not be aware of any addresses issued by DHCP, and does not
 guarantee that they will stay unchanged.
 
-### Routing[¶](#routing "Permalink to this headline")
+### Routing
 
 In IPv6, clients do not discover routes through DHCP. Routers make
 themselves known on their networks by sending out *route
@@ -106,10 +98,11 @@ nodes, you may still want to have RAs configured to make those clients
 obtain configuration over DHCP.
 
 If you need RAs but your gateway does not send them, install and
-configure `radvd`{.docutils .literal} somewhere on the network to
+configure `radvd` somewhere on the network to
 advertise its route.
 
-### Other installers and operating systems[¶](#other-installers-and-operating-systems "Permalink to this headline")
+### Other installers and operating systems
+
 
 Static IPv6 addresses are currently only configured on Ubuntu, when
 installed using the “fast” installer. Other operating systems, or Ubuntu
@@ -123,8 +116,7 @@ However, as long as the address remains allocated to the node, you may
 still configure its operating system to use that address. The node can
 then use that address as if it had been configured by MAAS.
 
-Disabling IPv4[¶](#disabling-ipv4 "Permalink to this headline")
----------------------------------------------------------------
+## Disabling IPv4
 
 For advanced users, there is an experimental capability to deploy nodes
 with pure IPv6, with IPv4 networking disabled. To enable this on a node,
@@ -136,9 +128,9 @@ only.
 In practice nodes may not be functional without IPv4 networking. A few
 things are known to be needed in any case:
 
-### Configuring the MAAS URL[¶](#configuring-the-maas-url "Permalink to this headline")
+### Configuring the MAAS URL
 
-The *maas-cluster-controller* package has a configuration item for the
+The `maas-cluster-controller` package has a configuration item for the
 URL where nodes and cluster controllers can reach the MAAS region API.
 
 By default, this URL is set based on the region controller’s IPv4
@@ -149,55 +141,12 @@ controller and on the nodes.
 
 To change this setting, run:
 
+```bash
     dpkg-reconfigure maas-cluster-controller
+```
 
 It will prompt you for the URL, with its current setting as the initial
 value.
 
-[![MAAS
-logo](_static/maas-logo-200.png)](index.html "MAAS Documentation Homepage")
 
-MAAS {style="text-align:center;"}
-----
 
-Metal As A Service.
-
-\
- \
-
--   [Managing IPv6 Networks](#)
-    -   [Enabling IPv6](#enabling-ipv6)
-        -   [Configuring your IPv6
-            subnet](#configuring-your-ipv6-subnet)
-        -   [Routing](#routing)
-        -   [Other installers and operating
-            systems](#other-installers-and-operating-systems)
-    -   [Disabling IPv4](#disabling-ipv4)
-        -   [Configuring the MAAS URL](#configuring-the-maas-url)
-
-### Related Topics
-
--   [Documentation overview](index.html)
-    -   Previous: [Static IPs](static-ips.html "previous chapter")
-    -   Next: [Boot images import
-        configuration](bootsources.html "next chapter")
-
-### This Page
-
--   [Show Source](_sources/ipv6.txt)
-
-### Quick search
-
-Enter search terms or a module, class or function name.
-
-### Navigation
-
--   [next](bootsources.html "Boot images import configuration")
--   [previous](static-ips.html "Static IPs") |
--   [MAAS 1.8 documentation](index.html) »
-
-© Copyright 2012-2015, MAAS Developers. Ubuntu and Canonical are
-registered trademarks of [Canonical Ltd](http://canonical.com).
-
-Revision 4036 (2015-08-05 16:30:57 +0000). Documentation generation
-date: 2015-08-12 22:30:33 +0100.
