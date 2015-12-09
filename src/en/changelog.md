@@ -1,5 +1,726 @@
 # Changelog
 
+# 1.9.0 (RC1)
+
+## Major bugs fixed in this release
+
+ - \#1515498 MAAS uses wrong IP for DNS record (creates against the bond).
+
+ - \#1515671 Local archive ignored for deployment. Works for commissioning and enlistment.
+
+ -  \#1513485 Fix handling of multiple StaticIPAddress rows with empty IP addresses.
+
+ -  \#1513485 Lease parser failure - doesn’t update IP on the PXE NIC.
+
+ -  \#1514486 Cannot claim sticky IP address for device with parent.
+
+ -  \#1514883 Cluster downloads boot-images from managed network (pxe) instead of network used to connect to Region.
+
+ -  \#1510917 Updating/modifying/assigning vlans, spaces, fabrics, subnets doesn’t allow specifying names and lock to ID’s.
+
+ -  \#1513095 MAAS should prevent deploying nodes with PXE interface ‘unconfigured’.
+
+ -  \#1508056 MTU should be a set on the VLAN, and able to override on the interface.
+
+ -  \#1439476 Internal Server Error when creating/editing cluster interface.
+
+ -  \#1510224 Non-interactive way to change password.
+
+ -  \#1513111 When a bond is created all IP address associated with the bond members should be 
+removed.
+
+ -  \#1487135 MAAS does not provide a dump of the config it passes to curtin for networking and storage.
+
+ -  \#1512959 MAAS should not offer EXT3, rather VFAT, EXT2, EXT4.
+
+ -  \#1505031 Network constraints for juju.
+
+ -  \#1509535 Creating a partition or a Volume Group on the whole disk leaves free space.
+
+ -  \#1511493 Should not allow partitions to be created on bcache device.
+
+ -  \#1503475 Storage section should only be editable when Ready or Allocated.
+
+ -  \#1512832 maasserver.api.tests.test_fannetworks.TestFanNetworksAPI.test_read fails randomly.
+
+ -  \#1508754 Creating a logical volume on a partition that is too small almost works, resulting in strange error messages.
+
+ -  \#1503925 [UI] Keep selected nodes selected after action.
+
+ -  \#1515380 [UI] Refresh UI cache after an upgrade to avoid seeing garbage.
+
+ -  \#1510106 [UI] Boot disk is not lighted nor can be changed.
+
+ -  \#1510118 [UI] Can’t remove / delete a partition with a filesystem under ‘Available disks 
+and partitions’
+
+ -  \#1510153 [UI] Creating a partition should allow to select filesystem and mountpoint.
+
+ -  \#1510468 [UI] When selecting a device, ensure padding between buttons is 20px.
+
+ -  \#1510455 [UI] Misaligned mount point column on used disks table.
+
+ -  \#1510469 [UI] Align the individual storage actions with the name field, rather than the tickbox.
+
+ -  \#1503479 [UI] can’t add physical interface.
+
+ -  \#1503474 [UI] Containers (lxc, kvm) data missing on node details.
+
+ -  \#1513271 [UI] Unable to unmount a filesystem in the UI.
+
+ -  \#1503536 [UI] Animation missing on show members and select node.
+
+ -  \#1510482 [UI] Add tooltips to icons.
+
+ -  \#1510486 [UI] Add tooltips to inactive buttons.
+
+
+# 1.9.0 (beta2)
+
+## Major bugs fixed in this release
+
+ -  \#1511257 New capabilities for subnets, vlan, spaces and fabrics.
+
+ -  \#1509077 Upgrade left a PXE NIC”s on nodes without a subnet associated
+causing deploy issues.
+ -  \#1512109 DNS record doesn’t get created against the PXE interface
+
+ -  \#1510334 bcache cache_mode setting not configured on servers
+
+ -  \#1510210 Administrators unable to delete users using the API
+
+ -  \#1509536 Can create a VolumeGroup (vg0) without having created a partition
+on the boot disk
+ -  \#1501400 set-boot-disk yields in a machine not being able to deploy
+
+ -  \#1504956 Deploying Other OS’ (CentOS, Windows) should not configure custom storage
+
+ -  \#1509164 Add RAID 10 support
+
+ -  \#1511437 MAAS should download grub from grub-efi-amd64-signed package instead
+of the archive path
+ -  \#1510120 Fails to deploy with UEFI
+
+ -  \#1507586 previous owner of node can use oauth creds to retrieve current
+owner’s user-data
+ -  \#1507630 IP range validation for too small ranges
+
+ -  \#1511610 TestReleaseAutoIPs.test__calls_update_host_maps_for_next_ip_managed_subnet
+can fail randomly
+ -  \#1511071 No way to disable maas-proxy
+
+ -  \#1505034 [UI] HWE naming needs to be clearer
+
+ -  \#1509476 [UI] Angular $digest loop issue on node details page
+
+ -  \#1509473 [UI] New nodes interfaces doesn’t show which interface is the PXE interface
+
+ -  \#1510471 [UI] When partitioning, there should be 20px padding between the sizing fields
+
+ -  \#1510467 [UI] On the available table, add model and serial to the name column
+
+ -  \#1510466 [UI] On the available table, change “available space” to “size” for consistency
+
+ -  \#1510472 [UI] when formatting/mounting, the button says “Format & Mount”
+this should just be “Mount”
+ -  \#1503533 [UI] Tickbox on create bond networking
+
+ -  \#1510447 [UI] On the file system table, change name to “File system” (lower case S)
+
+ -  \#1510474 [UI] When creating bcache and raid, remove the empty column between the
+config fields and
+ -  \#1510488 [UI] On the available table, make sure all buttons are lowercase
+
+ -  \#1511174 [UI] Subnets filter doesn’t show network, it shows name instead
+
+ - \#1509417 [UI] can’t edit / add storage tags
+
+ - \#1510891 [UI] Hover state for networking doesn’t work
+
+ - \#1510458 [UI] change “edit tag” link to icon storage
+
+ - \#1510629 [UI] Can no longer see the IP address PXE interface gets on commissioning
+
+# 1.9.0 (beta1)
+
+## Major New Features
+
+### Storage Configuration: LVM and RAID UI
+Starting from MAAS 1.9.0 (beta1), MAAS now exposes custom storage configuration 
+in the WebUI for the following:
+
+ - **LVM:** Ability to easily create LVM.
+ - **RAID:** Ability to create RAID 0, 1, 5, 6.
+
+
+## Minor notable changes
+
+### Fabric and subnet creation
+
+Starting from MAAS 1.9.0 (beta1), MAAS now auto-creates multiple fabrics per 
+physical interface connected to the Cluster Controller, and will correctly 
+create subnetworks under each fabric, as well as VLAN’s if any VLAN interface 
+on the Cluster Controller is preset.
+
+## Known Problems & Workarounds
+
+### CentOS fails to deploy
+CentOS fails to deploy when deploying with an LVM storage layout. Provided that
+LVM is the default storage layout, every CentOS deployment will fail, unless
+this layout is changed to ‘Flat’ storage.
+
+To work around the problem, the default storage layout can be changed from LVM
+to Flat in MAAS’ Networks page, under Storage Layout section.
+
+See bug #1499558 for more information.
+
+### Fail to deploy (boot) with UEFI
+MAAS will successfully instal in a UEFI system, however, after deployment it won’t boot onto the local disk. See bug 1510120 for more information.
+
+
+# 1.9.0 (alpha5)
+
+## Major New Features
+
+### Storage Configuration: Partitioning and Bcache UI
+Starting from MAAS 1.9.0 (alpha5), MAAS now exposes storage custom storage configuration in the WebUI for the following:
+
+ - **Partitioning:** Ability to create and delete partitions.
+ - **Bcache:** Ability to create cache sets and bcache devices, allowing multiple bcache devices to use the same cache set.
+
+## Minor notable changes
+
+### Warn users about missing power control tools
+MAAS now warns users about the missing power control tools. Each MAAS power driver use a set of power tools that may or may not be installed by default. If these power tools are missing from the system, MAAS will warn users.
+
+## Known Problems & Workarounds
+
+### CentOS fails to deploy with LVM Storage layout
+CentOS fails to deploy when deploying with an LVM storage layout. Provided that LVM is the default storage layout, every CentOS deployment will fail, unless this layout is changed to ‘Flat’ storage.
+
+To work around the problem, the default storage layout can be changed from LVM to Flat in MAAS’ Networks page, under Storage Layout section.
+
+See bug 1499558 for more information.
+
+### Juju 1.24.6 bootstrap failure - Changing MAAS configured /etc/network/interfaces
+Juju 1.24.6 (or less), assumes that it can manage the MAAS deployed node’s
+network configuration. Juju changes /etc/network/interfaces and disables
+bringing up eth0 on boot, to create a bridge to support LXC. However, provided
+that MAAS / curtin now writes the node’s network configuration, Juju is unable
+to successfully finish the creation of the bridge, but in the process, it
+disables auto bring up of eth0.
+
+Starting from Juju 1.24.7+, Juju has grown support to correctly manage a
+`/etc/network/interfaces` that has been created after deployment with MAAS 1.9.0.
+
+See bug 1494476 for more information.
+
+# 1.9.0 (alpha4)
+
+## Minor notable changes
+
+- Various UI cosmetic fixes and improvements.
+- Do not create MBR larger than 2TiB for LVM.
+- Various concurrency fixes and improvements to robustness.
+
+
+## Known Problems & Workarounds
+CentOS fails to deploy with LVM Storage layout
+CentOS fails to deploy when deploying with an LVM storage layout. Provided that LVM is the default storage layout, every CentOS deployment will fail, unless this layout is changed to ‘Flat’ storage.
+
+To work around the problem, the default storage layout can be changed from LVM to Flat in MAAS’ Networks page, under Storage Layout section.
+
+See bug 1499558 for more information.
+
+Juju 1.24+ bootstrap failure - Changing MAAS configured /etc/network/interfaces
+Juju 1.24+, by default, assumes that it can manage the MAAS deployed node’s network configuration. Juju changes /etc/network/interfaces and disables bringing up eth0 on boot, to create a bridge to support LXC. However, provided that MAAS / curtin now write the node’s network configuration, Juju is unable to successfully finish the creation of the bridge, but in the process, it disables auto bring up of eth0.
+
+The machine will deploy successfully, however, after a reboot eth0 will never be brought back up due to the changes made by Juju. This will prevent Juju from SSH’ing into the machine and finishing the boostrap.
+
+To prevent this from happening, disable-network-management: true needs to be used. Note that this will prevent the deployment of LXC containers as they have to DHCP.
+
+See bug 1494476 for more information.
+
+# 1.9.0 (alpha3)
+
+## Major New Features
+
+### Advanced Node Network Configuration UI
+Starting from MAAS 1.9.0 (alpha3), MAAS can now do the Node’s Network configuration. Doing such configuration will result in having /etc/network/interfaces writen.
+
+Advanced configuration UI includes:
+
+ - Create VLAN interfaces.
+ - Create bond interfaces.
+ - Create Alias interfaces.
+ - Change interface names.
+
+### Subnetworks page UI
+Starting from MAAS 1.9.0 (alpha3), MAAS can now show the new Subnets tab in the UI. This allow users to view:
+
+ - Fabrics
+ - Spaces
+ - VLANs in fabrics.
+ - Subnets in Spaces.
+
+## Known Problems & Workarounds
+
+### CentOS fails to deploy with LVM Storage layout
+CentOS fails to deploy when deploying with an LVM storage layout. Provided that LVM is the default storage layout, every CentOS deployment will fail, unless this layout is changed to ‘Flat’ storage.
+
+To work around the problem, the default storage layout can be changed from LVM to Flat in MAAS’ Networks page, under Storage Layout section.
+
+See bug 1499558 for more information.
+
+### Juju 1.24+ bootstrap failure - Changing MAAS configured /etc/network/interfaces
+Juju 1.24+, by default, assumes that it can manage the MAAS deployed node’s network configuration. Juju changes /etc/network/interfaces and disables bringing up eth0 on boot, to create a bridge to support LXC. However, provided that MAAS / curtin now write the node’s network configuration, Juju is unable to successfully finish the creation of the bridge, but in the process, it disables auto bring up of eth0.
+
+The machine will deploy successfully, however, after a reboot eth0 will never be brought back up due to the changes made by Juju. This will prevent Juju from SSH’ing into the machine and finishing the boostrap.
+
+To prevent this from happening, disable-network-management: true needs to be used. Note that this will prevent the deployment of LXC containers as they have to DHCP.
+
+See bug 1494476 for more information.
+
+# 1.9.0 (alpha2)
+
+## Important announcements
+
+### Installation by default configures /etc/network/interfaces
+Starting from MAAS 1.9.0 (alpha2), all Ubuntu deployments will result with static network configurations. Users will be able to interact with the API to further configure interfaces.
+Introduction to Fabrics, Spaces and Subnets introduces new Network API
+With the introduction of the concepts of Fabrics, Spaces and Subnets starting from MAAS 1.9.0 (alpha2), MAAS also introduces new API’s for:
+
+ - fabrics
+ - spaces
+ - subnets
+ - vlans
+ - fan-networks
+MAAS 1.9.0 will continue to provide backwards compatibility with the old network API for reading purposes, but moving forward, users are required to use the new API to manipulate fabrics, spaces and subnets.
+
+## Major New Features
+
+### Advanced Node Network Configuration
+Starting from MAAS 1.9.0 (alpha2), MAAS can now do the Node’s Network configuration. Doing such configuration will result in having /etc/network/interfaces writen.
+
+Advanced configuration includes:
+
+ - Assign subnets, fabrics, and IP to interfaces.
+ - Create VLAN interfaces.
+ - Create bond interfaces.
+ - Change interface names.
+ - Fabrics, Spaces, Subnets and Fan networks
+ - Starting from MAAS 1.9.0 (alpha2), MAAS now supports the concept of Fabrics, Spaces, Subnets and FANS.
+
+These new concepts replaces the old Network concepts from MAAS’ earlier versions. For more information, see Networking.
+
+For more information about the API, see api.
+
+### Curtin & cloud-init status updates
+Starting from MAAS 1.9.0 (alpha2), curtin and cloud-init will now send messages to MAAS providing information regarding various of the actions taken. This information will be displayed in MAAS in the Node Event Log.
+
+Note that this information is only available when using MAAS 1.9.0 and the latest version fo curtin. For cloud-init messages this information is only available when deploying Wily.
+
+## Minor notable changes
+
+### Commissioning Actions
+MAAS now supports commissioning actions. These allow the user to specify how commissioning should behave in certain escenarios. The commissioning actions available are:
+
+ - Enable SSH during commissioning
+ - Keep machine ON after commissioning
+ - Keep network configuration after commissioning
+ - Keep storage configuration after commissioning
+ - CentOS images can be imported automatically
+ - CentOS Image (CentOS 6 and 7) can now be imported automatically from the MAAS Images page. These images are currently part of the daily streams.
+
+In order to test this images, you need to use the daily image stream. This can be changed in the Settings page under Boot Images to http://maas.ubuntu.com/images/ephemeral-v2/daily/. Once changed, images can be imported from the MAAS Images page.
+
+## Known Problems & Workarounds
+
+### CentOS fails to deploy with LVM Storage layout
+CentOS fails to deploy when deploying with an LVM storage layout. Provided that LVM is the default storage layout, every CentOS deployment will fail, unless this layout is changed to ‘Flat’ storage.
+
+To work around the problem, the default storage layout can be changed from LVM to Flat in MAAS’ Networks page, under Storage Layout section.
+
+See bug 1499558 for more information.
+
+### Juju 1.24+ bootstrap failure - Changing MAAS configured /etc/network/interfaces
+Juju 1.24+, by default, assumes that it can manage the MAAS deployed node’s network configuration. Juju changes /etc/network/interfaces and disables bringing up eth0 on boot, to create a bridge to support LXC. However, provided that MAAS / curtin now write the node’s network configuration, Juju is unable to successfully finish the creation of the bridge, but in the process, it disables auto bring up of eth0.
+
+The machine will deploy successfully, however, after a reboot eth0 will never be brought back up due to the changes made by Juju. This will prevent Juju from SSH’ing into the machine and finishing the boostrap.
+
+To prevent this from happening, disable-network-management: true needs to be used. Note that this will prevent the deployment of LXC containers as they have to DHCP.
+
+See bug 1494476 for more information.
+
+# 1.9.0 (alpha1)
+
+## Important announcements
+
+### LVM is now the default partitioning layout
+Starting from MAAS 1.9, all of the deployments will result on having LVM configure for each of the machines. A Flat partitioning layout is not longer used by default. (This, however, can be changed in the MAAS Settings Page).
+Re-commissioning required from VM’s with VirtIO devices
+Starting from MAAS 1.9, storage partitioning and advance configuration is supported natively (see below). In order for MAAS to correctly map VirtIO devices in VM’s, these VM nodes need to be re-commissioned.
+
+If not re-comissioned, MAAS will prevent the deployment until done so. Previously deployed nodes won’t be affected, but will also have to be re-commissioned if released.
+
+## Major new features
+
+### Storage Partitioning and Advanced Configuration
+MAAS now natively supports Storage Partitioning and Advanced Configuration. This allows MAAS to deploy machines with different Storage Layouts, as well as different complext partitioning configurations. Storage support includes:
+
+ - LVM
+ - Bcache
+ - Software Raid
+ - Advanced partitioning
+
+For more information refer to Storage.
+
+## Minor notable changes
+
+### Minimal Config Files for Daemons
+Starting from MAAS 1.9, minimal configuration files have been introduced for both, the MAAS Region Controller and the MAAS Cluster Controller daemons.
+
+The Region Controller (maas-regiond) has now dropped the usage of /etc/maas/maas_local_settings.py in favor of /etc/maas/regiond.conf. Available configuration options are now database_host, database_name, database_user, database_pass, maas_url. MAAS will attempt to migrate any configuration on upgrade, otherwise it will use sane defaults.
+The Cluster Controller (maas-clusterd) has now dropped the usage of /etc/maas/pserv.yaml and /etc/maas/maas_cluster.conf in favor of /etc/maas/clusterd.conf. Available configuration options are now maas_url and cluster_uuid only. MAAS will attempt to migrate any configuration on upgrade, otherwise it will use sane defaults.
+
+### HWE Kernels
+MAAS now has a different approach to deploying Hardware Enablement Kernels. Start from MAAS 1.9, the HWE kernels are no longer coupled to subarchitectures of a machine. For each Ubuntu release, users will be able to select any of the available HWE kernels for such release, as well as set the minimum kernel the machine will be deployed with by default.
+
+For more information, see Using hardware-enablement kernels.
+
+### Python Power Drivers
+Starting from MAAS 1.9, MAAS is moving away from using shell scripts templates for Power Drivers. These are being migrated to MAAS’ internal control as power drivers. Currently supported are APC, MSCM, MSFT OCS, SM15k, UCSM, Virsh, VMWare and IPMI.
+
+Remaining Power Drivers include AMT, Fence CDU’s, Moonshot.
+
+## Known Problems & Workarounds
+Fail to deploy Trusty due to missing bcache-tools
+In order to correctly perform storage partitioning in Trusty+, the new version of curtin used by MAAS requires bcache-tools to be installed. However, these tools are not available in Trusty, hence causing MAAS/curtin deployment failures when installing Trusty. An SRU in Ubuntu Trusty for these tools is already in progress.
+
+To work around the problem, a curtin custom configuration to install bcache-tools can be used in /etc/maas/preseeds/curtin_userdata:
+
+```
+{{if node.get_distro_series() in ['trusty']}}
+early_commands:
+  add_repo: ["add-apt-repository", "-y", "ppa:maas-maintainers/experimental"]
+{{endif}}
+```
+
+See bug 1449099 for more information.
+
+### Fail to deploy LVM in Trusty
+MAAS fail to deploy Ubuntu Trusty with a LVM Storage layout, as curtin will fail to perform the partitioning. See bug 1488632 for more information.
+
+
+# 1.8.2
+See https://launchpad.net/maas/+milestone/1.8.2 for full details.
+
+Bug Fix Update
+ - #1484696 Regenerate the connection URL on websocket client reconnect, to fix
+CSRF after upgrade to 1.8.1.
+ - #1445942 Validate the osystem and distro_series when using the deploy action,
+which fixes win2012r2 deployment issues.
+ - #1481940 Fix failure in MAAS startup messages by not generating dhcpd config
+files when they are not in use.
+ - #1459865 Fix enlistment to always use the correct kernel parameters.
+
+# 1.8.1
+See https://launchpad.net/maas/+milestone/1.8.1 for full details.
+
+Bug Fix Update
+ - #1481118 Add –username to maas-region-admin apikey command docs.
+ - #1472707 Add ListBootImagesV2 RPC command. Fallback to using ListBootImages RPC
+when the ListBootImagesV2 is not handled on the cluster.
+ - #1470591 Fix setting the default_distro_series over the API.
+ - #1413388 Fix upgrade issue where it would remove custom DNS config, potentially breaking DNS
+ - #1317705 Commissioning x86_64 node never completes, sitting at grub prompt, pserv py tbs
+ - #1389007 Power monitor service hits amp.TooLong errors with > ~600 nodes to a cluster
+ - #1436279 Websocket server accessed over port 5240
+ - #1469305 If hostname not set, sudo warning make maas throw 500
+ - #1470585 Can’t set a list of forwarders (BIND config)
+ - #1469846 UCS chassis enlist Failed to probe and enlist UCS nodes: list index out of range
+ - #1470276 Add cisco snic to 3rd party driver
+ - #1402042 console= parameters need to be added before – on kernel cmdline
+ - #1465722 [UI] Machine details styling
+ - #1465737 [UI] Actions design styles
+ - #1465740 [UI] Replace close “X” with correct versions
+ - #1465742 [UI] Table design styles
+ - #1470389 [UI] Make table heading hover consistant with nodes/devices tabs
+ - #1470395 [UI] adding between node name and save button inconsistent
+ - #1459710 [UI] “Set zone” label oddly placed on node listing page
+
+1.8.0
+Important announcements
+Region Controller now running on twisted.
+The MAAS Region Controller is now running as a twisted daemon. It is no longer dependent on Apache in order to run. The MAAS Region controller is now controlled by maas-regiond upstart job or systemd unit. The maas-regiond daemon is available in port 5240.
+Firewall ports for Region and Cluster controller communication
+The communication between Region and Cluster controller is now limited to use the ports between 5250 and 5259. For all of those users who are using a remote cluster (not running on the same machine as the MAAS Region Controller), need to ensure that these ports are open in the firewall.
+Major new features
+Web UI Re-design
+MAAS now includes a newly re-designed Web UI. The new Web UI features a new design and a lot of usability improvements. Some of the UI new features include:
+
+Live Updating
+
+The new UI now allows users to view the current status of the various nodes of MAAS in real-time and without having to manually refresh the browser.
+
+Bulk Actions
+
+Quickly select multiple nodes or devices and perform actions. If nodes or devices are not in a state where that action can be performed MAAS will alert you to the machines allowing you to modify your selection before performing the action.
+
+Live Searching
+
+View the matching nodes or devices as you search. Just type and the nodes will start to filter, no reloading or waiting for the page to load.
+
+Better Filtering
+
+Easily filter through the list of nodes and devices in MAAS to find the specific nodes that match your search. Examples:
+
+All nodes that are Ready and have at least 2 disks:
+
+status:Ready disks:2
+All nodes that are not Ready:
+
+status:!Ready
+All nodes that have Failed to complete an action:
+
+status:Failed
+All nodes that are deployed but their power is off:
+
+status:Deployed power:off
+Node & Storage Tag Management
+
+Administrators can now add and remove tags for both Machine and Storage. This is now possible via the Web UI from the Node Details page.
+
+Add Chassis
+
+A new Add Chassis feature has been added to the UI. This is an option of Add Hardware. This not only allows administrators to add machines that belong to a single chassis, but also allows administrators to add Virtual Machines for both KVM and VMWare based products.
+
+Support for Devices
+MAAS adds a new concept for a different type of machines, called Devices. Devices are machines that MAAS does not fully manage; this means that MAAS can not power manage nor properly control. Devices are machines in the Network that MAAS can provide network services for (DHCP/DNS), or can track for inventory.
+
+Administrators can assign three different types of IP Address to a device:
+
+External, which can be any IP address on the network.
+Static, which can be selected manually or automatically, and belongs to Subnetwork that MAAS can control.
+Dynamic, any IP address that is automatically assigned by MAAS via DHCP. MAAS will automatically create a DNS mapping for any of the IP addresses belonging to a Device.
+Storage Discovery
+Storage that is attached to a node in MAAS is now a first class citizen. Easily view and filter nodes based on the number of disks and the size of each disk attached to a node. Information retrieved from a storage device includes its name, model, serial, size, block size, and extra information that is applied to a storage device as a tag. MAAS will auto tag devices including tags for solid state device (ssd), rotary, rpm speed, and connected bus.
+Twisted Daemons
+The MAAS Region Controller no longer requires an Apache frontend. It is still used by default to be backward compatible, but the MAAS Region Controller is now a standalone Twisted process (the twisted daemon for the Cluster Controller, maas-clusterd, was introduced in MAAS 1.7). The MAAS Region Controller is now maas-regiond.
+
+Starting from MAAS 1.8 the Region Controller and Cluster Controller are noq controlled only by two daemons. (maas-regiond and maas-clusterd respectively)
+
+DB Isolation
+Previously PostgreSQL was used in the default READ COMMITTED transaction isolation mode. It has now been increased to REPEATABLE READ. PostgreSQL thus provides extra support to ensure that changes in MAAS are logically consistent, a valuable aid in a busy distributed system.
+VMware support
+VMware products are now supported in MAAS. This allows MAAS to register all the Virtual Machines that the VMWare product is running (or a subset whose name matches a specified prefix), set them up to PXE boot, and configure them for power management.
+
+This feature requires the python-pyvmomi package to be installed. (This is a suggested package, so be sure to use --install-suggests on your apt-get command line when installing the MAAS cluster, or install it manually.)
+
+The following VMware products have been tested: vSphere Hypervisor 5.5, ESXi 5.5, and Workstation 11. This feature supports both i386 and amd64 virtual machines.
+
+Minor notable changes
+RPC Communication & Ports
+RPC communication between the Region Controller and the Cluster Controller has now been limited to use the ports between 5250 and 5259, inclusive.
+Discovered virtual machine names are imported into MAAS
+When using the new Add Chassis functionality (or the probe_and_enlist API), virtual machines (VMs) imported into MAAS will now use the names defined within the Hypervisor as hostnames in MAAS. This feature works with KVM (virsh or PowerKVM) and VMWare VMs.
+
+The names of the virtual machines will be converted into valid hostnames, if possible. For example, if a VM called Ubuntu 64-bit is imported, it will become ubuntu-64-bit.
+
+Note that only the hostname portion of the name is used. For example, if a VM is called maas1.example.com, only the “mass1” portion of the name will be used as the node name. (The cluster configuration determines the remainder of the DNS name.)
+
+Virtual machine boot order is now set automatically
+When using the new Add Chassis functionality (or the probe_and_enlist API) to add KVM or VMware virtual machines, MAAS will automatically attempt to set each virtual machine’s boot order so that the network cards (PXE) are attempted first. (This increases the repeatability of VM deployments, because a VM whose boot order is incorrectly set may work once, but subsequently fail to deploy.)
+Systemd Support
+MAAS now supports systemd, allowing all of the MAAS daemons to run with Systemd, if the Ubuntu system is running systemd by default instead Upstart. These daemons include maas-regiond, maas-clusterd, maas-dhcpd, maas-dhcpd6, maas-proxy.
+Upstart & Systemd improvements
+Both Upstart Jobs and Systemd Units now run and supervise various instances of the maas-regiond in order to be able to effectively handle all requests.
+Known Problems & Workarounds
+Disk space is not reclaimed when MAAS boot images are superseded
+Whenever new boot images are synced to maas-regiond, new large objects in the database are created for them, which may replace older versions of the same image (for the specified version/architecture combination). Unfortunately, the standard postgresql autovacuum does not remove large objects that are no longer used; a “full vacuum” is required for this. Therefore, a new command has been introduced which will run the appropriate postgresql vacuum command (See bug 1459876):
+
+maas-region-admin db_vacuum_lobjects
+This command should be run with care (ideally, during a scheduled maintenance period), since it could take a long time (on the order of minutes) if there are a large number of superseded images.
+
+MAAS logs to maas.log.1 instead of maas.log
+The /var/log/maas/maas.log is a rsyslog based log file, that gets rotated in the form of maas.log.1, maas.log.2.gz, etc. In one situation it has been seen that maas.log is empty, and rsyslog was sending logs to maas.log.1 instead. This has been identified as an issue in rsyslog rather than maas. See bug 1460678.
+Major bugs fixed in this release
+See https://launchpad.net/maas/+milestone/1.8.0 for full details.
+
+#1185455 Not obvious how to search nodes along a specific axis, or multiple axes
+
+#1277545 Node list sort order not maintained
+
+#1300122 No way to get the version of the MAAS server through the API
+
+#1315072 Finding BMC IP address requires clicking “Edit node” in Web UI
+
+#1329267 CLI does not tell users to issue a “refresh” when the API gets out of date
+
+#1337874 Re-commissioning doesn’t detect NIC changes
+
+#1352923 MAAS 1.8 requires arbitrary high-numbered port connections between cluster and region controllers
+
+#1384334 Dnssec failures cause nodes to be unable to resolve external addresses
+
+#1402100 Nodes can be in Ready state without commissioning data, if you mark a node in ‘failed commisioning’, broken and then fixed.
+
+#1412342 Maas.log only contains cluster logs
+
+#1424080 Deployment Failed – Failed to get installation results
+
+#1432828 MAAS needs to write power off jobs to to systemd units instead of upstart
+
+#1433622 Maas cluster name should not / can not have trailing ‘.’
+
+#1433625 ‘APIErrorsMiddleware’ object has no attribute ‘RETRY_AFTER_SERVICE_UNAVAILABLE’
+
+#1435767 Retry mechanism fails with oauth-authenticated requests
+
+#1436027 Interfaces does not have entry for eth0
+
+#1437388 exceptions.AttributeError: ‘NoneType’ object has no attribute ‘is_superuser’
+
+#1437426 No view for loading page or notification for connection error
+
+#1438218 django.db.transaction.TransactionManagementError: raised when deploying multiple nodes in the UI
+
+#1438606 Releasing node not transitioned to “Failed releasing”
+
+#1438808 Network and storage tables on node details page mis-aligned in Firefox
+
+#1438842 Cannot add an extra NIC
+
+#1439064 Title of individual commissioning result page is permanently “Loading...”
+
+#1439159 maas packaging in vivid needs to prevent isc-dhcpd and squid3 from running
+
+#1439239 MAAS API node details failures
+
+#1439322 Simultaneous IP address requests with only one succeeding
+
+#1439339 “Choose power type” dropdown broken in FF
+
+#1439359 When upgrading to MAAS 1.7 from MAAS 1.5, MAAS should trigger the image import automatically.
+
+#1439366 MAAS 1.7 should be backwards compatible with 1.5 the preseed naming convention
+
+#1440090 NIC information (networks / PXE interface) get’s lost due to re-discovering NIC’s during commissioning
+
+#1440763 Rregiond.log Tracebacks when trying to deploy 42 nodes at a time
+
+#1440765 oauth.oauth.OAuthError: Parameter not found: %s’ % parameter
+
+#1441002 Maas api “device claim-sticky-ip-address” fails with “500: ‘bool’ object has not attribute ‘uuid’”.
+
+#1441021 No IP validation
+
+#1441399 Socket.error: [Errno 92] Protocol not available
+
+#1441610 Machines get stuck in releasing for a long time
+
+#1441652 502 Proxy Error when trying to access MAAS in browser
+
+#1441756 Manager service is not sending limit to region
+
+#1441841 Can’t add a device that has IP address that it is within the wider range MAAS manages, but not within Dynamic/Static range MAAS manages
+
+#1441933 Internal Server Error when saving a cluster without Router IP
+
+#1442059 Failed deployment/release timeout
+
+#1442162 Spurious test failure: maasserver.api.tests.test_nodes.TestFilteredNodesListFromRequest.test_node_list_with_ids_orders_by_id
+
+#1443344 MAAS node details page shows BMC password in cleartext
+
+#1443346 utils.fs.atomic_write does not preserve file ownership
+
+#1443709 Error on request (58) node.check_power
+
+#1443917 IntegrityError: duplicate key value violates unique constraint “maasserver_componenterror_component_key”, (component)=(clusters) already exists
+
+#1445950 Proxy error when trying to delete a windows image
+
+#1445959 Deploying a different OS from node details page yields in always deploying ubuntu
+
+#1445994 Add Devices button has disappeared
+
+#1445997 Clicking on a device takes be back to node details page
+
+#1446000 MAC is not shown in device list
+
+#1446810 Too Many Open Files in maas.log
+
+#1446840 Internal server error saving the clusters interfaces
+
+#1447009 Combo loader crash when requesting JS assets
+
+#1447208 deferToThread cannot wait for a thread in the same threadpool
+
+#1447736 Node isn’t removed from the node listing when it becomes non-visible
+
+#1447739 Node isn’t added to the node listing when it becomes visible
+
+#1449011 maas root node start distro_series=precise on a non-allocated node returns wrong error message
+
+#1449729 Nodes fail to commission
+
+#1450091 tgt does not auto-start on Vivid
+
+#1450115 django.db.utils.OperationalError raised when instantiating MAASAndNetworkForm
+
+#1450488 MAAS does not list all the tags
+
+#1451852 Legacy VMware “add chassis” option should be removed
+
+#1451857 Probe-and-enlist for VMware needs to update VM config to use PXE boot
+
+#1453730 Commissioning script contents is shown under other settings
+
+#1453954 500 error reported to juju when starting node - “another action is already in progress for that node”
+
+#1455151 Adding one device on fresh install shows as two devices until page refresh
+
+#1455643 Regression: Node listing extends past the edge of the screen
+
+#1456188 Auto image import stacktraces
+
+#1456538 Package install fails with “invoke-rc.d: unknown initscript, /etc/init.d/maas-regiond-worker not found.”
+
+#1456698 Unable to deploy a node that is marked fixed when it is on
+
+#1456892 500 error: UnboundLocalError: local variable ‘key_required’ referenced before assignment
+
+#1456969 MAAS cli/API: missing option set use-fast-installer / use-debian-installer
+
+#1457203 Usability - Enter key in search field should not reset view and filter
+
+#1457708 Cluster gets disconnected after error: provisioningserver.service_monitor.UnknownServiceError: ‘maas-dhcpd’ is unknown to upstart.
+
+#1457786 Test suite runs sudo commands
+
+#1458894 Cluster image download gives up and logs an IOError too soon
+
+#1459380 MAAS logs 503 spurious errors when the region service isn’t yet online
+
+#1459607 Spurious test: maasserver.api.tests.test_node.TestNodeAPI.test_POST_commission_commissions_node
+
+#1459876 When MAAS Boot Images are Superseded, Disk Space is not Reclaimed
+
+#1460485 MAAS doesn’t transparently remove multiple slashes in URLs
+
+#1461181 Too many open files, after upgrade to rc1
+
+#1461256 Filter by node broken in Chromium - angular errors in java script console
+
+#1461977 Unused “Check component compatibility and certification” field should be removed
+
+#1462079 Devices can’t add a device with a Static IP address outside of dyanmic/static range
+
+#1462320 eventloop table is out of date
+
+#1462507 BlockDevice API is not under the nodes endpoint
+
 
 ## 1.7.3
 
